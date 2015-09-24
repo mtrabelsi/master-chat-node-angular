@@ -1,0 +1,52 @@
+  <div class="col-md-3">
+            <div class="list-group">
+                <div class="row">
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" ng-model="room" placeholder="Créer une room" />
+                    </div>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-warning" ng-click="createRoom()">
+                            <i class="fa fa-plus"></i> Créer 
+                        </button>
+                    </div>
+                </div>
+
+                <br/>
+                <!--<a href="#" ng-class="{'active':clicked === 'awaiting'}" ng-click="getTickets(0);clicked='awaiting'" class="list-group-item">
+                    <i class="fa fa-signal fa-lg"></i> room1
+                    <span class="badge"> {{awaiting || 0}}</span>
+                </a> -->
+
+                <a href="#" ng-repeat="room in rooms" ng-click="" class="list-group-item">
+                    <i class="fa fa-signal fa-lg"></i> {{room.name}}
+                    <span class="badge"> 0</span>
+                </a> 
+              
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-10">
+                    <input type="text" class="form-control" ng-model="tmpMessage" placeholder="Send a message" />
+                </div>
+                <div class="col-md-1">
+                    <a class="btn btn-success" ng-click="sendMessage(tmpMessage);tmpMessage='';"> <i class="fa fa-comment"></i> Envoyer
+                    </a>
+                </div>
+            </div>
+            <div id="chatBox" style="margin-top:10px;" schroll-bottom="messages">
+                <div ng-repeat="message in messages">
+                    <div class="message">
+                        <div class="messageTextInMessage">
+                            <i class="fa fa-user fa-lg"></i> <b> {{message.nickname | uppercase}} ></b> {{message.message}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="list-group" ng-init="clicked = 'none'">
+                <a href="#" ng-class="{'active':clicked === 'awaiting'}" ng-click="getTickets(0);clicked='awaiting'" class="list-group-item">
+                    <i class="fa fa-user fa-lg"></i> Pending Tickets
+                </a>
+            </div>
+        </div>

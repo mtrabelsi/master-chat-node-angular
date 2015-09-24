@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <base href="/">
+    <title>Welcome</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/login.css"/>
+    <!--	<link rel="stylesheet" href="assets/css/style.css">  custom styles -->
+    <!--	<link rel="stylesheet" href="assets/css/style-chat.css">  custom styles -->
+    <!-- JS -->
+    <script src="socket.io-client/socket.io.js"></script>
+    
+	<script src="jquery/dist/jquery.min.js"></script>
+
+    <script src="angular/angular.min.js"></script>
+    <script src="angular-route/angular-route.min.js"></script>
+    <!--    <script src="bootstrap/dist/js/bootstrap.min.js"></script> 
+-->
+    <script src="ui-router/release/angular-ui-router.min.js"></script>
+    <!--
+		<script src="angular-cookies/angular-cookies.min.js"></script>
+-->
+    <script src="angular-resource/angular-resource.min.js"></script>
+    <script src="angular-scroll/angular-scroll.min.js"></script>
+    <link rel="stylesheet" href="angular-chart.js/dist/angular-chart.css">
+    <script src="Chart.js/Chart.min.js"></script>
+    <script src="angular-chart.js/dist/angular-chart.min.js"></script>
+    <!-- angular moment includes -->
+    <script src="moment/min/moment.min.js"></script>
+    <script src="angular-moment/angular-moment.min.js"></script>
+    <!-- Wysiwyg -->
+    <!--	<link rel='stylesheet' href='textAngular/src/textAngular.css'> 
+		<script src='textAngular/dist/textAngular-rangy.min.js'></script>
+		<script src='textAngular/dist/textAngular-sanitize.min.js'></script>
+		-->
+    <!--<script src="angular-sanitize/angular-sanitize.min.js"></script>-->
+    <!--	<script src='textAngular/dist/textAngular.min.js'></script>-->
+    <!--<link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libs.min.css">-->
+    <!-- ngstrap -->
+    <link rel="stylesheet" href="angular-motion/dist/angular-motion.min.css">
+    </script>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    </script>
+    <script src="angular-animate/angular-animate.min.js"></script>
+    <!-- delete sanatize -->
+    <script src="angular-strap/dist/angular-strap.min.js"></script>
+    <script src="angular-strap/dist/angular-strap.tpl.min.js"></script>
+    <!-- chat -->
+    <script src="modules/chat/ChatController.js"></script>
+    <script src="modules/chat/ChatConfig.js"></script> 
+    <script src="modules/chat/SocketService.js"></script>
+
+    <!-- login -->
+    <script src="modules/login/LoginController.js"></script>
+
+    <!-- end chat -->
+    <script src="modules/main/MainController.js"></script>
+    <script src="modules/main/MainService.js"></script>
+    <script src="modules/main/SessionService.js"></script>
+    <!--		<script src="modules/main/guest/GuestController.js"></script>
+		<script src="modules/main/guest/GuestRouter.js"></script>
+-->
+    <!--angular app -->
+    <script src="app.js"></script>
+    <script src="routes.js"></script>
+</head>
+
+<body ng-app="module.app">
+    <nav class="navbar navbar-inverse  navbar-static-top" ng-controller="MainController">
+                <div class="navbar-header">
+                  <a class="navbar-brand" ng-if="nickname">Welcome to Chat-Land!</a>
+                  <a class="navbar-brand" ng-if="!nickname" ng-click="goToLogin()">Please enter a nickname</a>
+                </div> 
+
+                <div class="navbar-right">
+                  <a class="navbar-brand" style="margin-right:40px;">{{nickname}}</a>
+                </div>
+
+    </nav>
+
+    <div class="container-fluid" ng-controller="MainController">
+    		<div ui-view></div>
+    </div>
+</body>
+
+</html>
