@@ -1,4 +1,7 @@
-
+#chatBox {
+    font-style: italic;
+    font-size: 10pt;
+}
 .form-signin
 {
     max-width: 330px;

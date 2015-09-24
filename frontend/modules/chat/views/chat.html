@@ -1,4 +1,4 @@
-  <div class="col-md-3">
+  <div class="col-md-5">
             <div class="list-group">
                 <div class="row">
                     <div class="col-md-8">
@@ -16,18 +16,27 @@
                     <i class="fa fa-signal fa-lg"></i> room1
                     <span class="badge"> {{awaiting || 0}}</span>
                 </a> -->
+                <div class="row" ng-repeat="room in rooms" >
+                    <div class="col-md-10">
 
-                <a href="#" ng-repeat="room in rooms" ng-click="" class="list-group-item">
-                    <i class="fa fa-signal fa-lg"></i> {{room.name}}
-                    <span class="badge"> 0</span>
-                </a> 
-              
+                        <a href="#"  ng-click="joinRoom(room.name)" class="list-group-item">
+                            <i class="fa fa-signal fa-lg"></i> {{room.name}} - {{room.owner}} is owner
+                            <span class="badge"> {{room.users.length}}</span>
+                        </a> 
+                    </div>
+                    <div class="col-md-2">
+
+                        <button type="button" class="btn btn-danger" ng-click="leaveRoom(room.name)">
+                                    <i class="fa fa-sign-out"></i> Leave 
+                                </button>
+                    </div>
+              </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="row">
                 <div class="col-md-10">
-                    <input type="text" class="form-control" ng-model="tmpMessage" placeholder="Send a message" />
+                    <input type="text" id="chatBox" class="form-control" ng-model="tmpMessage" placeholder="Send a message" />
                 </div>
                 <div class="col-md-1">
                     <a class="btn btn-success" ng-click="sendMessage(tmpMessage);tmpMessage='';"> <i class="fa fa-comment"></i> Envoyer
@@ -43,10 +52,12 @@
                 </div>
             </div>
         </div>
+
+        <!-- list of users of a specif room
         <div class="col-md-3">
             <div class="list-group" ng-init="clicked = 'none'">
                 <a href="#" ng-class="{'active':clicked === 'awaiting'}" ng-click="getTickets(0);clicked='awaiting'" class="list-group-item">
                     <i class="fa fa-user fa-lg"></i> Pending Tickets
                 </a>
             </div>
-        </div>
+        </div>-->

@@ -1,6 +1,6 @@
 var chatModule = angular.module('module.chat', []);
 
-chatModule.controller('ChatController', function($scope,$rootScope, Socket) {
+chatModule.controller('ChatController', function($scope, $rootScope, Socket) {
     $scope.rooms = [];
 
     Socket.emit("getRoomList", {});
@@ -15,34 +15,26 @@ chatModule.controller('ChatController', function($scope,$rootScope, Socket) {
     });
     
     $scope.sendMessage = function(msg) {
-        Socket.emit("msg", {nickname: $rootScope.nickname ,message:msg});
+        Socket.emit("msg", {nickname: $rootScope.nickname, message:msg});
     };
 
     $scope.createRoom = function() {
-         Socket.emit("roomEvent", {roomName: $scope.room,join:true});
+         Socket.emit("roomEvent", {roomName: $scope.room, join:true});
     }
+    $scope.joinRoom = function(room) {
+         Socket.emit("roomEvent", {roomName: room, join:true});
+    }
+    $scope.leaveRoom = function(room) {
+         Socket.emit("roomEvent", {roomName: room, join:false});
+    }
+
+
 
 
     Socket.on('roomList', function(data) {
-        $scope.rooms = [];
+        $scope.rooms = data.rooms;
 
-        Object.keys(data.rooms).forEach(function(key, val) {
-            var owner = usernameById(data.users, key);
-          
-            $scope.rooms.push({
-                name: key,
-                owner: owner
-            });
-        });
     });
 
-    function usernameById(cArray, id) {
-        var ret = '';
-        cArray.forEach(function(user) {
-            if (user.id == id)
-                ret = user.nickname;
-        });
-        return ret;
-    }
 
 });

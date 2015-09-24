@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "my first socket.io app",
   "dependencies": {
-    "socket.io": "~1.2.1",
-    "express" : "~4.2"
+    "chalk": "^1.1.1",
+    "express": "~4.2",
+    "socket.io": "~1.2.1"
   }
 }
