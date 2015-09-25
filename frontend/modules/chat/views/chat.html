@@ -37,9 +37,8 @@
                       Action <span class="caret"></span>
                     </button>
 
-                    <input type="text" id="chatBox" class="form-control" ng-keyup="$event.keyCode == 13 && sendMessage(tmpMessage)"ng-model="tmpMessage" placeholder="Send a message" />
                      <div class="form-group">
-                        <input type="text" class="form-control" ng-keyup="$event.keyCode == 13 && fireSendMessage(selectedUser)" ng-model="selectedUser" bs-options="user.nickname for user in users" placeholder="Send a message" bs-typeahead>
+                        <input type="text" id="chatBox" class="form-control" ng-keyup="$event.keyCode == 13 && fireSendMessage(selectedUser)" ng-model="selectedUser" bs-options="user.nickname for user in users" placeholder="Send a message" bs-typeahead>
                     </div>
                 </div>
                 <div class="col-md-1">
