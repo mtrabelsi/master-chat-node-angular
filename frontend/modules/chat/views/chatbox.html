@@ -1,0 +1,36 @@
+<div class="aside" tabindex="-1" role="dialog">
+    <div class="aside-dialog">
+        <div class="aside-content">
+
+            <div class="aside-header" ng-show="aside.title">
+                <button type="button" class="close" ng-click="$hide()">&times;</button>
+                <h4 class="aside-title" ng-bind="aside.title"></h4>
+            </div>
+
+            <div class="aside-body">
+                <div class="chatControls">
+                   <span>{{aside.text}}</span><br/><br/><br/>
+                            <div class="row">
+                                <div class="col-md-5">
+                                      <a class="btn btn-danger" ng-click="$hide()"> <i class="fa fa-thumbs-down"></i> Refuse
+                                    </a>
+                                </div>
+                                <div class="col-md-5">
+                                    <a class="btn btn-success" ng-click="joinRoom(aside.invitedRoom);$hide()"> <i class="fa fa-thumbs-up"></i> Accept
+                                    </a>
+                                </div>
+                            </div>
+                      
+                    
+                </div>
+            </div>
+
+            <div class="aside-footer">
+                <button type="button" class="btn btn-default" ng-click="$hide()">
+                   <i class="fa fa-frown-o"></i> I don't know what should i do :/
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

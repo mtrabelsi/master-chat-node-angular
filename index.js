@@ -85,10 +85,20 @@ console.log(info('[END] Rooms Owners'));
     **********           **********/
 
     socket.on('pmsg', function(msg) {
-        if(msg.nickname && typeof msg.nickname!= "undefined"){
-            io.sockets.to(socket.room).emit('msgFront', msg);
+        if(!socket.room || typeof socket.room== "undefined"){
+            io.sockets.to(socket.id).emit('msgFront', {nickname: 'ROBOT' ,message: 'You cant send private message, please join at least a room first!'});
+            return;
+        }
+        if(isAlreadyJoined(msg.to, socket.room)){
+            var toUser = getUserByNickname(msg.to);
+            console.log('toUser',toUser);
+            console.log('msg',msg);
+
+            [toUser.id,socket.id].forEach(function(id) {
+                io.sockets.to(id).emit('pmsgFront', {private: true, nickname:socket.nickname, message:msg.message});
+            });
         }else{
-            io.sockets.to(socket.id).emit('msgFront', {nickname: 'ROBOT' ,message: 'You cant send message to other rooms, please join at least a room then try again!'});
+            io.sockets.to(socket.id).emit('msgFront', {nickname: 'ROBOT' ,message: 'You cant send private message to users of other room!'});
         }
     });
 
@@ -97,14 +107,38 @@ console.log(info('[END] Rooms Owners'));
     Description : This event sends all rooms informations when a user connects,joins,leaves or disconnects.
     Params      : NO PARAMS
     **********           **********/
-
     socket.on('getRoomList', roomList);
 
 
+    /********* @getUserList *********
+    Description : This event sends all users informations when a user fire it.
+    Params      : NO PARAMS
+    **********           **********/
+    socket.on('getUserList', userList);
+
+
+    /********* @invite *********
+    Description : This event handle sending/prodcasting users messages inside a specific room
+    Params      : msg object {message: STRING, nickname: STRING} - where the nickname is the
+    sender of the message
+    **********           **********/
+
+    socket.on('invite', function(users) {
+        if(socket.room && typeof socket.room!= "undefined"){
+
+            users.forEach(function(user) {
+                io.sockets.to(user.id).emit('inviteFront', {from:socket.nickname, room: socket.room});
+            });
+
+        }else{
+            io.sockets.to(socket.id).emit('msgFront', {nickname: 'ROBOT' ,message: 'You cant invite users, please join at least a room then try again!'});
+        }
+    });  
+
     /********* @msg *********
     Description : This event handle sending/prodcasting users messages inside a specific room
-    Params      : msg object {message: STRING, nickname: STRING} - where the nickname is the user nickname
-    receiving the message
+    Params      : msg object {message: STRING, nickname: STRING} - where the nickname is the
+    sender of the message
     **********           **********/
 
     socket.on('msg', function(msg) {
@@ -210,6 +244,17 @@ console.log(info('[END] Rooms Owners'));
         });
         return rooms;
     }
+    function isAlreadyJoined(nickname,room){
+        var joined = false;
+        var usersOfThatRoom = populateUsers(room);
+        usersOfThatRoom.forEach(function(user){
+            if(user.nickname==nickname){
+                joined = true;
+            }
+        });
+
+        return joined;
+    }
 
     function roomList() {
         var rooms = getRoomsList();
@@ -218,6 +263,15 @@ console.log(info('[END] Rooms Owners'));
             rooms: rooms
         });
     }
+
+    function userList() {
+        var users = getUsersList();
+        
+        io.emit('userList', {
+            users: users
+        });
+    }
+
 
     function populateUsers(roomName) {
       var populatedUsers = [];
@@ -233,6 +287,17 @@ console.log(info('[END] Rooms Owners'));
         var ret = '';
         allUsers.forEach(function(user) {
             if (user.id == id)
+                ret = user;
+        });
+        return ret;
+    }
+
+    function getUserByNickname(nickname) {
+      var allUsers = getUsersList();
+
+        var ret = '';
+        allUsers.forEach(function(user) {
+            if (user.nickname == nickname)
                 ret = user;
         });
         return ret;

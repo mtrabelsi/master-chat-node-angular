@@ -38,7 +38,7 @@
 		-->
     <!--<script src="angular-sanitize/angular-sanitize.min.js"></script>-->
     <!--	<script src='textAngular/dist/textAngular.min.js'></script>-->
-    <!--<link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libs.min.css">-->
+    <link rel="stylesheet" href="//mgcrea.github.io/angular-strap/styles/libs.min.css">
     <!-- ngstrap -->
     <link rel="stylesheet" href="angular-motion/dist/angular-motion.min.css">
     </script>
@@ -46,6 +46,8 @@
     </script>
     <script src="angular-animate/angular-animate.min.js"></script>
     <!-- delete sanatize -->
+    <script src="angular-sanitize/angular-sanitize.min.js"></script>
+
     <script src="angular-strap/dist/angular-strap.min.js"></script>
     <script src="angular-strap/dist/angular-strap.tpl.min.js"></script>
     <!-- chat -->
@@ -60,9 +62,7 @@
     <script src="modules/main/MainController.js"></script>
     <script src="modules/main/MainService.js"></script>
     <script src="modules/main/SessionService.js"></script>
-    <!--		<script src="modules/main/guest/GuestController.js"></script>
-		<script src="modules/main/guest/GuestRouter.js"></script>
--->
+
     <!--angular app -->
     <script src="app.js"></script>
     <script src="routes.js"></script>
@@ -71,8 +71,8 @@
 <body ng-app="module.app">
     <nav class="navbar navbar-inverse  navbar-static-top" ng-controller="MainController">
                 <div class="navbar-header">
-                  <a class="navbar-brand" ng-if="nickname">Welcome to Chat-Land!</a>
-                  <a class="navbar-brand" ng-if="!nickname" ng-click="goToLogin()">Please enter a nickname</a>
+                  <a class="navbar-brand" ng-if="nickname"><i class="fa fa-slack"></i> Welcome to ChatVideo!</a>
+                  <a class="navbar-brand" ng-if="!nickname" ng-click="goToLogin()"><i class="fa fa-sign-in"></i> Please enter a nickname</a>
                 </div> 
 
                 <div class="navbar-right">
