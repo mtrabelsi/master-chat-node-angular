@@ -71,7 +71,7 @@ var roomsOwners = new Object();
 
 io.on('connection', function(socket) {
 
-roomsOwners[socket.id] = {ownerName : socket.nickname};
+roomsOwners[socket.id] = {ownerName : socket.nickname, isDefault:true};
 
 console.log(info('[BEGIN] Rooms Owners :'));
 console.log(roomsOwners);
@@ -182,7 +182,7 @@ console.log(info('[END] Rooms Owners'));
             socket.room = room.roomName;
             //check for new room - if the room is new, set his owner to the current connected socket's nickname
             if(!roomsOwners[socket.room] && typeof roomsOwners[socket.room]==="undefined"){
-                roomsOwners[socket.room] = {ownerName : socket.nickname};
+                roomsOwners[socket.room] = {ownerName : socket.nickname,isDefault:false};
             }
             socket.join(socket.room);
             console.log('User ',fine(socket.nickname),'have joined',fine(socket.room));
@@ -230,15 +230,29 @@ console.log(info('[END] Rooms Owners'));
     }
 
     function getRoomsList(){
+        var allRooms = getAllRoomsList();
+        var usersRooms = [];
+        allRooms.forEach(function(room){
+            if(room.isDefault==false){
+                usersRooms.push(room);
+            }
+        });
+
+        return usersRooms;
+    }
+
+    function getAllRoomsList(){
         var rooms = [];
 
         Object.keys(io.sockets.adapter.rooms).forEach(function(roomName,index ,idsOfThatRoom) {
             var owner = roomsOwners[roomName].ownerName;
             var usersOfThatRoom = populateUsers(roomName);
-          
+            var isDefault = roomsOwners[roomName].isDefault;
+
             rooms.push({
                 name: roomName,
                 owner: owner,
+                isDefault: isDefault,
                 users: usersOfThatRoom
             });
         });

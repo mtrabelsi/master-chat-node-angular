@@ -110,7 +110,7 @@ chatModule.controller('ChatController', function($scope, $rootScope, Socket, $as
     });
 
     Socket.on('roomList', function(data) {
-        $scope.rooms = data.rooms;
+      $scope.rooms   = data.rooms;
     });
 
     Socket.on('userList', function(data) {
