@@ -27,6 +27,12 @@ var prefixFrontend = __dirname + '/frontend/';
 var prefixBower = __dirname + '/bower_modules';
 
 
+
+//handle rooms owners list
+var roomsOwners = new Object();
+var userHelper = require('./server/userHelper.js')(io);
+var roomHelper = require('./server/roomHelper.js')(io,roomsOwners,userHelper);
+
 app.use(cookieParser()); // read cookies (needed for auth)
 // get all data/stuff of the body (POST) parameters
 app.use(bodyParser.json()); // parse application/json
@@ -66,8 +72,6 @@ io.use(function(socket, next) {
 
 //main room
 var mainRoom = 'Main room';
-//handle rooms owners list
-var roomsOwners = new Object();
 
 io.on('connection', function(socket) {
 
@@ -217,50 +221,12 @@ console.log(info('[END] Rooms Owners'));
         roomList();
     });
 
-    function getUsersList(){
-        var users = [];
-        io.sockets.sockets.forEach(function(socket) {
-            users.push({
-                id: socket.id,
-                nickname: socket.nickname
-            })
-        });
+    
 
-        return users;
-    }
-
-    function getRoomsList(){
-        var allRooms = getAllRoomsList();
-        var usersRooms = [];
-        allRooms.forEach(function(room){
-            if(room.isDefault==false){
-                usersRooms.push(room);
-            }
-        });
-
-        return usersRooms;
-    }
-
-    function getAllRoomsList(){
-        var rooms = [];
-
-        Object.keys(io.sockets.adapter.rooms).forEach(function(roomName,index ,idsOfThatRoom) {
-            var owner = roomsOwners[roomName].ownerName;
-            var usersOfThatRoom = populateUsers(roomName);
-            var isDefault = roomsOwners[roomName].isDefault;
-
-            rooms.push({
-                name: roomName,
-                owner: owner,
-                isDefault: isDefault,
-                users: usersOfThatRoom
-            });
-        });
-        return rooms;
-    }
+   
     function isAlreadyJoined(nickname,room){
         var joined = false;
-        var usersOfThatRoom = populateUsers(room);
+        var usersOfThatRoom = userHelper.populateUsers(room);
         usersOfThatRoom.forEach(function(user){
             if(user.nickname==nickname){
                 joined = true;
@@ -271,7 +237,7 @@ console.log(info('[END] Rooms Owners'));
     }
 
     function roomList() {
-        var rooms = getRoomsList();
+        var rooms = roomHelper.getRoomsList();
         
         io.emit('roomList', {
             rooms: rooms
@@ -279,7 +245,7 @@ console.log(info('[END] Rooms Owners'));
     }
 
     function userList() {
-        var users = getUsersList();
+        var users = userHelper.getUsersList();
         
         io.emit('userList', {
             users: users
@@ -287,27 +253,11 @@ console.log(info('[END] Rooms Owners'));
     }
 
 
-    function populateUsers(roomName) {
-      var populatedUsers = [];
-      Object.keys(io.sockets.adapter.rooms[roomName]).forEach(function(userId, index) {
-            populatedUsers.push(getUserById(userId));
-                   });
-      return populatedUsers;
-    }
-
-    function getUserById(id) {
-      var allUsers = getUsersList();
-
-        var ret = '';
-        allUsers.forEach(function(user) {
-            if (user.id == id)
-                ret = user;
-        });
-        return ret;
-    }
+   
+ 
 
     function getUserByNickname(nickname) {
-      var allUsers = getUsersList();
+      var allUsers = userHelper.getUsersList();
 
         var ret = '';
         allUsers.forEach(function(user) {
