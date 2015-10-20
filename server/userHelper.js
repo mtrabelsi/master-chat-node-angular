@@ -11,8 +11,7 @@ var getUserById = function(id) {
             return ret;
         };
 
-
-var getUsersList =  function (){
+var getUsersList =  function () {
         var users = [];
         io.sockets.sockets.forEach(function(socket) {
             users.push({
@@ -23,9 +22,6 @@ var getUsersList =  function (){
 
         return users;
     };
-
-
-
 
 
      return {

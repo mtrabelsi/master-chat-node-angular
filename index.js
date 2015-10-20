@@ -22,6 +22,12 @@ var warn  = chalk.bold.yellow;
 var fine  = chalk.bold.green;
 var info  = chalk.bold.blue;
 
+var csl = { error : error,
+            warn : warn,
+            fine : fine,
+            info : info
+          };
+
 //prefixes
 var prefixFrontend = __dirname + '/frontend/';
 var prefixBower = __dirname + '/bower_modules';
@@ -31,7 +37,7 @@ var prefixBower = __dirname + '/bower_modules';
 //handle rooms owners list
 var roomsOwners = new Object();
 var userHelper = require('./server/userHelper.js')(io);
-var roomHelper = require('./server/roomHelper.js')(io,roomsOwners,userHelper);
+var roomHelper = require('./server/roomHelper.js')(io,roomsOwners,userHelper,csl);
 
 app.use(cookieParser()); // read cookies (needed for auth)
 // get all data/stuff of the body (POST) parameters
@@ -87,7 +93,6 @@ console.log(info('[END] Rooms Owners'));
     Params      : msg object {message: STRING, nickname: STRING} - where the nickname is the user nickname
     receiving the message
     **********           **********/
-
     socket.on('pmsg', function(msg) {
         if(!socket.room || typeof socket.room== "undefined"){
             io.sockets.to(socket.id).emit('msgFront', {nickname: 'ROBOT' ,message: 'You cant send private message, please join at least a room first!'});
@@ -126,7 +131,6 @@ console.log(info('[END] Rooms Owners'));
     Params      : msg object {message: STRING, nickname: STRING} - where the nickname is the
     sender of the message
     **********           **********/
-
     socket.on('invite', function(users) {
         if(socket.room && typeof socket.room!= "undefined"){
 
@@ -144,7 +148,6 @@ console.log(info('[END] Rooms Owners'));
     Params      : msg object {message: STRING, nickname: STRING} - where the nickname is the
     sender of the message
     **********           **********/
-
     socket.on('msg', function(msg) {
         if(socket.room && typeof socket.room!= "undefined"){
             io.sockets.to(socket.room).emit('msgFront', msg);
@@ -153,7 +156,7 @@ console.log(info('[END] Rooms Owners'));
         }
     }); 
 
-    function roomsDigest() {
+   /* function roomsDigest() {
       Object.keys(roomsOwners).forEach(function(roomName, owner) {
         var uselessRoom = true;
            Object.keys(io.sockets.adapter.rooms).forEach(function(sysRoomName, idsInThatRoom) {
@@ -172,6 +175,7 @@ console.log(info('[END] Rooms Owners'));
     console.log(roomsOwners);
     console.log(warn('[END] Rooms Owners '));
     }
+    */
     /********* @roomEvent *********
     Description : This event handle room join and leave and all related info
     Params      : room object {join: BOOLEAN, roomName: STRING}
@@ -192,7 +196,7 @@ console.log(info('[END] Rooms Owners'));
             console.log('User ',fine(socket.nickname),'have joined',fine(socket.room));
 
             //clean out unused rooms - checks if there any unused room and clean them
-            roomsDigest();
+            roomHelper.roomsDigest();
         }
         else{
             if(room.roomName==socket.id){
@@ -205,7 +209,7 @@ console.log(info('[END] Rooms Owners'));
             console.log('User ',warn(socket.nickname),'has left',warn(room.roomName));
 
             //clean out unused rooms - checks if there any unused room and clean them
-            roomsDigest();
+            roomHelper.roomsDigest();
         }
 
         roomList();
@@ -217,7 +221,7 @@ console.log(info('[END] Rooms Owners'));
     socket.on('disconnect', function() {
         console.log(error('User <'+socket.nickname+'> disconnected'));
         //clean out unused rooms - checks if there any unused room and clean them
-        roomsDigest();
+        roomHelper.roomsDigest();
         roomList();
     });
 
