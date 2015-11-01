@@ -2,7 +2,19 @@ module.exports = function(app, mongoose) {
 
     var User = require('./models/user')(mongoose);
 
-    app.post('/api/user', function(req, res) {
+    app.post('/api/user/get', function(req, res) {    
+        console.log(req.body.username,req.body.password);
+       User.findOne({
+            username: req.body.username,
+            password: req.body.password
+        }, function(err, user) {
+            if (err) return console.error(err);
+        
+            res.send(user);
+        });
+    });
+
+    app.post('/api/user/create', function(req, res) {
         var user = new User({
             username: req.body.username,
             password: req.body.password
@@ -60,8 +72,8 @@ module.exports = function(app, mongoose) {
     });
 
 
-
-    app.get('/api/user', function(req, res) {
+//get all users
+    app.get('/api/users/get', function(req, res) {
         User.find({}, function(err, users) {
             if (err) return console.error(err);
             res.send(users);

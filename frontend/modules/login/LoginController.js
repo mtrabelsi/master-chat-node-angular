@@ -9,13 +9,22 @@ loginModule.controller('LoginController', function($scope,$rootScope,$state,$htt
 	};
 
     $scope.signin = function() {
-      $rootScope.nickname=$scope.nickname;
-      $state.go('chat');
+	 	$http.post('/api/user/get',{
+	  		username : $scope.nickname,
+	  		password: $scope.password
+	  	}).success(function(data) {
+	  		if($scope.nickname == data.username) {
+		      $rootScope.nickname=$scope.nickname;
+		      $state.go('chat');	  			
+	  		} else {
+	  			alert('Please verify your credential..')
+	  		}
+	  	});
     };
 
 
   	$scope.signup = function() {
-	  	$http.post('/api/user',{
+	  	$http.post('/api/user/create',{
 	  		username : $scope.signupData.username,
 	  		password: $scope.signupData.password
 	  	}).success(function(data){
