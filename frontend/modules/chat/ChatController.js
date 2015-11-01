@@ -12,6 +12,30 @@ chatModule.controller('ChatController', function($scope, $rootScope, Socket, $as
         private : false
     };
 
+
+$scope.tabs = [
+  {
+    "title": "Rooms",
+    "page": "modules/chat/views/tabs/rooms.html"
+  },
+  {
+    "title": "Friends",
+    "page": "modules/chat/views/tabs/friends.html"
+  },
+  {
+    "title": "Search new friend",
+    "page": "modules/chat/views/tabs/allUsers.html"
+  },
+  {
+    "title": "Invitations",
+    "page": "modules/chat/views/tabs/invitations.html"
+  }
+];
+
+$scope.tabs.activeTab = "Rooms";
+
+
+
     $scope.$watch('selectedUser', function() {
        if(typeof $scope.selectedUser == 'object'){
         $scope.messageMode.private = true;

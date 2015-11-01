@@ -5,6 +5,7 @@
   "dependencies": {
     "chalk": "^1.1.1",
     "express": "~4.2",
+    "mongoose": "^4.1.12",
     "socket.io": "~1.2.1"
   }
 }

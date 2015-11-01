@@ -21,6 +21,7 @@ var warn = chalk.bold.yellow;
 var fine = chalk.bold.green;
 var info = chalk.bold.blue;
 
+//console
 var csl = {
     error: error,
     warn: warn,
@@ -31,6 +32,11 @@ var csl = {
 //prefixes
 var prefixFrontend = __dirname + '/frontend/';
 var prefixBower = __dirname + '/bower_modules';
+
+var mongoose = require('mongoose');
+    mongoose.connect('mongodb://localhost:27017/chatserver');
+
+
 
 //handle rooms owners list
 var roomsOwners = new Object();
@@ -65,6 +71,11 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 app.get('/', function(req, res) {
     res.sendfile(prefixFrontend + 'modules/main/views/index.html');
 });
+// var u = new User({username:'okk ', password:'kkk'});
+
+// });
+
+var api = require('./server/api')(app,mongoose);
 
 //middelware that will be executed for each new connected user
 io.use(function(socket, next) {
@@ -73,10 +84,11 @@ io.use(function(socket, next) {
     next();
 });
 
+//events
 var events = require('./server/events')(io, roomsOwners, userHelper, roomHelper, csl);
 
-var port = process.env.PORT || 8080; // set our port
 
+var port = process.env.PORT || 8080; // set our port
 http.listen(port, function() {
     console.log('chat server listening on ', fine('*:8080'));
 });

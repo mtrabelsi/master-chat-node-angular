@@ -1,0 +1,29 @@
+     		<div class="list-group">
+                <div class="row">
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" ng-model="room" placeholder="Créer une room" />
+                    </div>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-warning" ng-click="createRoom();room='';">
+                            <i class="fa fa-plus"></i> Créer 
+                        </button>
+                    </div>
+                </div>
+
+                <br/>
+                 <div class="row" ng-repeat="room in rooms" >
+                    <div class="col-md-10">
+
+                        <a href="#"  ng-click="joinRoom(room.name)" class="list-group-item">
+                            <i class="fa fa-signal fa-lg"></i> {{room.name}} - {{room.owner}} is owner
+                            <span class="badge"> {{room.users.length}}</span>
+                        </a> 
+                    </div>
+                    <div class="col-md-2">
+
+                        <button type="button" class="btn btn-danger" ng-click="leaveRoom(room.name)">
+                                    <i class="fa fa-sign-out"></i> Leave 
+                                </button>
+                    </div>
+                 </div>
+            </div> 
