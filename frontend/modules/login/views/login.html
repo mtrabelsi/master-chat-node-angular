@@ -5,9 +5,17 @@
             <img class="profile-img" src="assets/img/photo-login.png" alt="">
             <form class="form-signin">
                 <input type="text" class="form-control" name="nickname" placeholder="enter a nickname" ng-model="nickname" required autofocus>
+                <input type="password" class="form-control" name="nickname" placeholder="password" ng-model="password" required autofocus>
+                
                 <button class="btn btn-lg btn-default btn-block" ng-click="signin()">
                     <i class="fa fa-sign-in"></i> Sign in
                 </button>
+                <br/>
+
+                <span>Have you already an account? </span> 
+                <button type="button" class="btn btn-default btn-danger" data-animation="am-fade-and-slide-top" data-template-url="modules/login/views/signup.html" bs-modal="modal"> Create one
+                </button>
+
             </form>
         </div>
     </div>
