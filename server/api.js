@@ -17,14 +17,16 @@ module.exports = function(app, mongoose) {
         });
     });
 
+
     app.put('/api/user/invite/:requestedId', function(req, res) {
         User.findOne({
             _id: req.params.requestedId
         }, function(err, user) {
             if (err) return console.error(err);
 
-            if(user.invitations.indexOf(req.body.reqesterId) == -1)
+            if(user.invitations.indexOf(req.body.reqesterId) == -1 && user.friends.indexOf(req.body.reqesterId)== -1) {
                 user.invitations.push(req.body.reqesterId);
+            }
 
             user.save(function(err, user) {
                 if (err) return console.error(err);
@@ -34,6 +36,7 @@ module.exports = function(app, mongoose) {
             });
         });
     }); 
+
 
     app.put('/api/user/accept/:requestedId', function(req, res) {
         User.findOne({
@@ -49,13 +52,14 @@ module.exports = function(app, mongoose) {
 
             user.save(function(err, user) {
                 if (err) return console.error(err);
-
                 // console.log(JSON.stringify(user));
                 res.send(user);
 
             });
         });
     });
+
+
 
     app.get('/api/user', function(req, res) {
         User.find({}, function(err, users) {
