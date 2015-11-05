@@ -13,28 +13,6 @@ chatModule.controller('ChatController', function($scope, $rootScope, Socket, $as
     };
 
 
-$scope.tabs = [
-  {
-    "title": "Rooms",
-    "page": "modules/chat/views/tabs/rooms.html"
-  },
-  {
-    "title": "Friends",
-    "page": "modules/chat/views/tabs/friends.html"
-  },
-  {
-    "title": "Search new friend",
-    "page": "modules/chat/views/tabs/allUsers.html"
-  },
-  {
-    "title": "Invitations",
-    "page": "modules/chat/views/tabs/invitations.html"
-  }
-];
-
-$scope.tabs.activeTab = "Rooms";
-
-
 
     $scope.$watch('selectedUser', function() {
        if(typeof $scope.selectedUser == 'object'){
@@ -102,7 +80,7 @@ $scope.tabs.activeTab = "Rooms";
     });
     
     $scope.sendMessage = function(msg) {
-        Socket.emit("msg", {nickname: $rootScope.nickname, message:msg});
+        Socket.emit("msg", {nickname: $rootScope.user.username, message:msg});
         $scope.tmpMessage = '';
     };
 

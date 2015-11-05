@@ -1,3 +1,14 @@
+.accept-icone {
+  position: absolute;
+  top: 20%;
+  left: 70%;
+}
+.decline-icone {
+  position: absolute;
+  top: 20%;
+  left: 80%;
+}
+
 .pm {
 background-color: silver;
 }

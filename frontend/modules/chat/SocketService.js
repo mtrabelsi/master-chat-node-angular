@@ -2,7 +2,7 @@
 
 
      var socket = io.connect('http://localhost:8080', {
-            query: "nickname="+$rootScope.nickname+"&roomName=MyRoom"
+            query: "nickname="+$rootScope.user.username+"&roomName=MyRoom"
      });
 
      return {

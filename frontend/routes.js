@@ -11,8 +11,7 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
     .state('chat', {
         url: '/chat',
-        templateUrl: 'modules/chat/views/chat.html',
-        controller: 'ChatController'
+        templateUrl: 'modules/chat/views/chat.html'
     })
 
 

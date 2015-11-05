@@ -1,1 +1,11 @@
-friends
+<div class="list-group">
+    <div class="input-group">
+        <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Go!</button>
+      </span>
+        <input type="text" class="form-control" placeholder="Search for a friend" />
+    </div>
+    <ul class="nav nav-pills nav-stacked" ng-repeat="friend in friends">
+        <li role="presentation"><a href="#"><i class="fa fa-user"></i> {{friend.username}}<i class="fa fa-comment pull-right"></i></a> </li>
+    </ul>
+</div>

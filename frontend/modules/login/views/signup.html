@@ -1,0 +1,36 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Singup</h4>
+      </div>
+
+  <div class="modal-body">
+    <form class="form-signin">
+                <input type="text" class="form-control" name="nickname" placeholder="Username" ng-model="signupData.username" required autofocus>
+                <input type="password" class="form-control" name="nickname" placeholder="password" ng-model="signupData.password" required autofocus>
+               
+
+            </form>
+
+  </div>
+          <div class="modal-footer">
+
+              <button type="button" class="btn btn-danger" ng-click="$hide();">
+                    <i class="fa fa-times"></i> Cancel
+              </button>
+
+              <button type="button" class="btn btn-success" ng-click="signup();$hide();">
+                   <i class="fa fa-credit-card"></i> Create my account!
+              </button>
+
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>

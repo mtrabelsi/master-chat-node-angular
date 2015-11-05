@@ -2,11 +2,14 @@ var loginModule = angular.module('module.login', []);
 
 loginModule.controller('LoginController', function($scope,$rootScope,$state,$http) {
 
+	$scope.nickname = 'marwen';
+	$scope.password = 'trabelsi';
 
 	$scope.signupData = {
 		username: '',
 		password: ''
 	};
+
 
     $scope.signin = function() {
 	 	$http.post('/api/user/get',{
@@ -14,7 +17,7 @@ loginModule.controller('LoginController', function($scope,$rootScope,$state,$htt
 	  		password: $scope.password
 	  	}).success(function(data) {
 	  		if($scope.nickname == data.username) {
-		      $rootScope.nickname=$scope.nickname;
+		      $rootScope.user =  data;
 		      $state.go('chat');	  			
 	  		} else {
 	  			alert('Please verify your credential..')

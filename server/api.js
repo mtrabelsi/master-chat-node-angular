@@ -2,6 +2,27 @@ module.exports = function(app, mongoose) {
 
     var User = require('./models/user')(mongoose);
 
+    app.get('/api/user/friends/:userId', function(req, res) {    
+       User.findOne({_id: req.params.userId})
+           .populate('friends')
+           .exec(function(err, user) {
+            if (err) return console.error(err);
+               res.send(user.friends);
+            });
+           
+    });
+
+    app.get('/api/user/invitations/:userId', function(req, res) {    
+       User.findOne({_id: req.params.userId})
+           .populate('invitations')
+           .exec(function(err, user) {
+            if (err) return console.error(err);
+               res.send(user.invitations);
+            });
+           
+    });
+
+
     app.post('/api/user/get', function(req, res) {    
         console.log(req.body.username,req.body.password);
        User.findOne({
@@ -13,6 +34,7 @@ module.exports = function(app, mongoose) {
             res.send(user);
         });
     });
+
 
     app.post('/api/user/create', function(req, res) {
         var user = new User({
@@ -44,7 +66,6 @@ module.exports = function(app, mongoose) {
                 if (err) return console.error(err);
 
                 res.send(user);
-
             });
         });
     }); 
@@ -72,7 +93,7 @@ module.exports = function(app, mongoose) {
     });
 
 
-//get all users
+    //get all users
     app.get('/api/users/get', function(req, res) {
         User.find({}, function(err, users) {
             if (err) return console.error(err);

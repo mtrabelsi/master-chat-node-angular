@@ -52,6 +52,7 @@
     <script src="angular-strap/dist/angular-strap.tpl.min.js"></script>
     <!-- chat -->
     <script src="modules/chat/ChatController.js"></script>
+    <script src="modules/chat/TabsController.js"></script>
     <script src="modules/chat/ChatConfig.js"></script> 
     <script src="modules/chat/SocketService.js"></script>
 
@@ -71,12 +72,12 @@
 <body ng-app="module.app">
     <nav class="navbar navbar-inverse  navbar-static-top" ng-controller="MainController">
                 <div class="navbar-header">
-                  <a class="navbar-brand" ng-if="nickname"><i class="fa fa-slack"></i> Welcome to ChatVideo!</a>
-                  <a class="navbar-brand" ng-if="!nickname" ng-click="goToLogin()"><i class="fa fa-sign-in"></i> Please enter a nickname</a>
+                  <a class="navbar-brand" ng-if="user.username"><i class="fa fa-slack"></i> Welcome to ChatVideo!</a>
+                  <a class="navbar-brand" ng-if="!user.username" ng-click="goToLogin()"><i class="fa fa-sign-in"></i> Please enter a username</a>
                 </div> 
 
                 <div class="navbar-right">
-                  <a class="navbar-brand" style="margin-right:40px;">{{nickname}}</a>
+                  <a class="navbar-brand" style="margin-right:40px;">{{user.username}}</a>
                 </div>
 
     </nav>
