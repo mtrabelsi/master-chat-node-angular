@@ -25,12 +25,11 @@ chatModule.controller('TabsController', function($q, $scope, $rootScope, $http) 
         if(decision==false) {
             alert("It's not a bug, but it's not implimented yet!");
         } else {
-            $http.get('/api/user/accept/'+$rootScope.user._id,{reqesterId: userId}).success(function(user){
-                  return $http.get('/api/user/invitations/'+$rootScope.user._id);
-            }).then(function(invitations){
-                $scope.invitations = invitations;
-            },function(error){
-                alert('an error has been occured');
+            $http.put('/api/user/accept/'+$rootScope.user._id,{reqesterId: userId}).success(function(user){
+               $http.get('/api/user/invitations/'+$rootScope.user._id).success(function(invitations){
+                    console.log(invitations);
+                    $scope.invitations = invitations;
+                });
             });
         }
     }
