@@ -1,7 +1,6 @@
 chatModule.controller('TabsController', function($q, $scope, $rootScope, $http) {
 
     $scope.users = [];
-
     $scope.tabs = [{
         "title": "Rooms",
         "page": "modules/chat/views/tabs/rooms.html"
@@ -19,6 +18,25 @@ chatModule.controller('TabsController', function($q, $scope, $rootScope, $http) 
         $scope.tabs.activeTab = tab;
     }
 
+
+    $scope.unfriend = function(userId) {
+        console.log(userId);
+          $http.put('/api/user/unfriend/'+$rootScope.user._id,{reqesterId: userId}).success(function(user){
+               $http.get('/api/user/friends/'+$rootScope.user._id).success(function(friends){
+                    $scope.friends = friends;
+                });
+            });
+    }
+
+    $scope.startConversation = function(userId) {
+        alert('startConversation');
+    }
+
+    $scope.sendInvitation = function(userId) {
+           $http.put('/api/user/invite/'+userId,{reqesterId: $rootScope.user._id}).success(function(user){
+                console.log('invited '+userId);
+            });
+    }
     $scope.accept = function(decision,userId){
           var deferred = $q.defer();
 

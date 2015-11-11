@@ -6,6 +6,9 @@
         <input type="text" class="form-control" placeholder="Search for a friend" />
     </div>
     <ul class="nav nav-pills nav-stacked" ng-repeat="user in users">
-        <li role="presentation"><a href="#"><i class="fa fa-user"></i> {{user.username}}<i class="fa fa-user-plus pull-right"></i></a> </li>
+        <li role="presentation"><a href="#"><i class="fa fa-user"></i> {{user.username}}</a> 
+
+ <button ng-click="sendInvitation(user._id)" class="btn-danger decline-icone"><i class="fa fa-user-plus pull-right"></i></button> 
+        </li>
     </ul>
 </div>
