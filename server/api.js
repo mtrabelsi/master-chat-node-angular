@@ -55,6 +55,7 @@ module.exports = function(app, mongoose) {
 
 
     app.put('/api/user/invite/:requestedId', function(req, res) {
+        if(req.params.requestedId!=req.body.reqesterId)
         User.findOne({
             _id: req.params.requestedId
         }, function(err, user) {
