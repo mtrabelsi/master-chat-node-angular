@@ -1,6 +1,14 @@
 chatModule.controller('TabsController', function($q, $scope, $rootScope, $http) {
 
     $scope.users = [];
+    $scope.search = {
+     
+            fusername: '',
+            ousername: ''
+      
+    };
+
+
     $scope.tabs = [{
         "title": "Rooms",
         "page": "modules/chat/views/tabs/rooms.html"
@@ -17,7 +25,6 @@ chatModule.controller('TabsController', function($q, $scope, $rootScope, $http) 
     $scope.changeTab = function(tab){
         $scope.tabs.activeTab = tab;
     }
-
 
     $scope.unfriend = function(userId) {
         console.log(userId);
@@ -55,17 +62,13 @@ chatModule.controller('TabsController', function($q, $scope, $rootScope, $http) 
     $scope.tabs.activeTab = "Rooms";
 
     var handleTabChange = function() {
+
         if($scope.tabs.activeTab=="Friends") {
-            $http.get('/api/user/friends/'+$rootScope.user._id).success(function(friends){
-                $scope.friends = friends;
-            });
+            $scope.search('friends');
         }
 
         if($scope.tabs.activeTab=="Search") {
-            $http.get('/api/users/get').success(function(users){
-                $scope.users = users;
-
-            });
+            $scope.search('other')
         }
 
         if($scope.tabs.activeTab=="Invitations") {
@@ -85,6 +88,18 @@ chatModule.controller('TabsController', function($q, $scope, $rootScope, $http) 
             console.log(data);
         });
     };
+
+    $scope.search = function(who) {
+       if(who=="friends") 
+         $http.get('/api/user/friends/'+$rootScope.user._id+'?q='+$scope.search.fusername).success(function(friends){
+            $scope.friends = friends;
+        });
+        else
+            $http.get('/api/users/get'+'?q='+$scope.search.ousername).success(function(users){
+                $scope.users = users;
+
+            });
+    }
 
 
 });

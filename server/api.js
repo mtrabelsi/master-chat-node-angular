@@ -2,17 +2,36 @@ module.exports = function(app, mongoose) {
 
     var User = require('./models/user')(mongoose);
     var async = require('async');
+    var _ = require('lodash');
 
 
     app.get('/api/user/friends/:userId', function(req, res) {    
+       if(req.query.q =="undefined")
+          req.query.q = '';
        User.findOne({_id: req.params.userId})
            .populate('friends')
            .exec(function(err, user) {
             if (err) return console.error(err);
-               res.send(user.friends);
+
+             var regex = new RegExp(req.query.q, "i");
+                User.find({username:regex})
+                    .exec(function(err,users) {
+                      var filtredUsers = [];   
+                       user.friends.forEach(function(friend) {
+                           users.forEach(function(similar) {
+                            if(similar.username==friend.username) {
+                                filtredUsers.push(similar);
+                              }
+                           });
+
+                       });
+
+                        res.send(filtredUsers);
+                    });
             });
+       });
            
-    });
+
 
     app.get('/api/user/invitations/:userId', function(req, res) {    
        User.findOne({_id: req.params.userId})
@@ -146,12 +165,26 @@ module.exports = function(app, mongoose) {
     });
 
 
+
+
     //get all users
     app.get('/api/users/get', function(req, res) {
-        User.find({}, function(err, users) {
-            if (err) return console.error(err);
-            res.send(users);
-        });
+        if(req.query.q =="undefined")
+            req.query.q = '';
+
+            var regex = new RegExp(req.query.q, "i");
+            User.find({username:regex})
+                .exec(function(err,users) {
+                  if (err) return console.error(err);
+
+            
+
+                    res.send(users);
+                });
+
+
+
+       // res.send(users);
     });
 
 }

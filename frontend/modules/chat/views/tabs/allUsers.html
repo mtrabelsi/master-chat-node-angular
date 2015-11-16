@@ -3,7 +3,7 @@
         <span class="input-group-btn">
         <button class="btn btn-default" type="button">Go!</button>
       </span>
-        <input type="text" class="form-control" placeholder="Search for a friend" />
+        <input type="text" ng-keyup="search('other')" ng-model="search.ousername" class="form-control" placeholder="Search for a friend" />
     </div>
     <ul class="nav nav-pills nav-stacked" ng-repeat="user in users">
         <li role="presentation"><a href="#"><i class="fa fa-user"></i> {{user.username}}</a> 
