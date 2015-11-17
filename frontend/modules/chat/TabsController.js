@@ -36,7 +36,7 @@ chatModule.controller('TabsController', function($q, $scope, $rootScope, $http) 
     }
 
     $scope.startConversation = function(userId) {
-        alert('startConversation');
+        alert('startConversation '+userId);
     }
 
     $scope.sendInvitation = function(userId) {
