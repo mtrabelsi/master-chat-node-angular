@@ -4,10 +4,7 @@ module.exports = function(mongoose) {
     //    ticket: { type: Schema.Types.ObjectId, ref: 'Ticket'},
     //createdBy: { type: Schema.Types.ObjectId, ref: 'User'},
     var userSchema = new Schema({
-        username: String,
-        password: String,
-        friends: [Schema.Types.ObjectId],
-        invitations: [Schema.Types.ObjectId],
+        roomName: String,
         created: Date,
         updated: Date
     });
@@ -19,7 +16,7 @@ module.exports = function(mongoose) {
     };
     */
     // checking if password is valid
-    userSchema.methods.validPassword = function(password) {
+    roomSchema.methods.validPassword = function(password) {
         //	return bcrypt.compareSync(password, this.password);   //warning!!! must be uncommented in the future for security ! Marwen
         return this.password == password;
     };
@@ -36,5 +33,5 @@ module.exports = function(mongoose) {
     });
 
 
-    return mongoose.model('User', userSchema);
+    return mongoose.model('Room', roomSchema);
 };
