@@ -35,8 +35,14 @@ chatModule.controller('TabsController', function($q, $scope, $rootScope, $http) 
             });
     }
 
-    $scope.startConversation = function(userId) {
-        alert('startConversation '+userId);
+    $scope.startConversation = function(fUsername) {
+        //alert('startConversation '+userId);
+        var arr = [$rootScope.user.username,fUsername];
+       
+        $http.post('/api/room/create',{users: arr}).success(function(data){
+            
+            alert("you can chat with "+fUsername+" now! type a message!");
+        });
     }
 
     $scope.sendInvitation = function(userId) {
@@ -74,6 +80,12 @@ chatModule.controller('TabsController', function($q, $scope, $rootScope, $http) 
         if($scope.tabs.activeTab=="Invitations") {
             $http.get('/api/user/invitations/'+$rootScope.user._id).success(function(invitations){
                 $scope.invitations = invitations;
+            });
+        }
+
+       if($scope.tabs.activeTab=="Rooms") {
+            $http.get('/api/room/'+$rootScope.user.username).success(function(rms){
+                $scope.rooms = rms;
             });
         }
 

@@ -75,7 +75,7 @@ app.get('/', function(req, res) {
 
 // });
 
-var api = require('./server/api')(app,mongoose);
+
 
 //middelware that will be executed for each new connected user
 io.use(function(socket, next) {
@@ -84,6 +84,8 @@ io.use(function(socket, next) {
     next();
 });
 
+
+var api = require('./server/api')(app,mongoose,io, roomHelper, roomsOwners, csl);
 //events
 var events = require('./server/events')(io, roomsOwners, userHelper, roomHelper, csl);
 

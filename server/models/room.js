@@ -3,8 +3,9 @@ module.exports = function(mongoose) {
     var Schema = mongoose.Schema;
     //    ticket: { type: Schema.Types.ObjectId, ref: 'Ticket'},
     //createdBy: { type: Schema.Types.ObjectId, ref: 'User'},
-    var userSchema = new Schema({
+    var roomSchema = new Schema({
         roomName: String,
+        users: [String],
         created: Date,
         updated: Date
     });
@@ -21,17 +22,16 @@ module.exports = function(mongoose) {
         return this.password == password;
     };
 
-
-    userSchema.pre('save', function(next) {
+    roomSchema.pre('save', function(next) {
         now = new Date();
         this.updated = now;
+
 
         if (!this.created) {
             this.created = now;
         }
         next();
     });
-
 
     return mongoose.model('Room', roomSchema);
 };

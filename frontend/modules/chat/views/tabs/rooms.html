@@ -11,19 +11,35 @@
                 </div>
 
                 <br/>
+
+                <!-- 
+                {
+                    "_id": "567c787e947fad30167944d6",
+                    "created": "2015-12-24T22:58:06.364Z",
+                    "updated": "2015-12-24T22:58:06.364Z",
+                    "roomName": "[marwen,user1]",
+                    "__v": 0,
+                    "users": [
+                      "marwen",
+                      "user1"
+                    ]
+                }
+                -->
                  <div class="row" ng-repeat="room in rooms" >
                     <div class="col-md-10">
-
-                        <a href="#"  ng-click="joinRoom(room.name)" class="list-group-item">
-                            <i class="fa fa-signal fa-lg"></i> {{room.name}} - {{room.owner}} is owner
+                        <!-- ng-click="joinRoom(room.name)" -->
+                        <a href="#" class="list-group-item">
+                            <i class="fa fa-signal fa-lg"></i> {{room.roomName}}
                             <span class="badge"> {{room.users.length}}</span>
                         </a> 
                     </div>
+                    <!--
                     <div class="col-md-2">
 
                         <button type="button" class="btn btn-danger" ng-click="leaveRoom(room.name)">
                                     <i class="fa fa-sign-out"></i> Leave 
                                 </button>
                     </div>
+                    -->
                  </div>
             </div> 

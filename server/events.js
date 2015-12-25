@@ -127,10 +127,10 @@ module.exports = function(io, roomsOwners, userHelper, roomHelper, csl) {
         socket.on('roomEvent', function(room) {
             if (room.join == true) {
                 //leave the previous joined room - make sure that we join one room at the same time and it's not the default room
-                if (socket.room != room.roomName && socket.room != socket.id) {
+  /*              if (socket.room != room.roomName && socket.room != socket.id) {
                     socket.leave(socket.room);
                 }
-
+*/
                 socket.room = room.roomName;
                 //check for new room - if the room is new, set his owner to the current connected socket's nickname
                 if (!roomsOwners[socket.room] && typeof roomsOwners[socket.room] === "undefined") {
@@ -145,6 +145,7 @@ module.exports = function(io, roomsOwners, userHelper, roomHelper, csl) {
                 //clean out unused rooms - checks if there any unused room and clean them
                 roomHelper.roomsDigest();
             } else {
+                console.log("leaveeeeeeeeeeeeeeeeeeeeeeeeeeeeeee!!!");
                 if (room.roomName == socket.id) {
                     io.sockets.to(socket.id).emit('msgFront', {
                         nickname: 'ROBOT',
