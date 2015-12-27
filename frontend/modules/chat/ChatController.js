@@ -1,6 +1,8 @@
 var chatModule = angular.module('module.chat', ['angularMoment','ngSanitize','mgcrea.ngStrap','ngAnimate']);
 
 chatModule.controller('ChatController', function($scope, $rootScope, Socket, $aside) {
+window.chat_sc = $scope;
+
     $scope.rooms = [];
     $scope.time = new Date();
 
@@ -21,7 +23,7 @@ chatModule.controller('ChatController', function($scope, $rootScope, Socket, $as
     });
 
     //this function will detect if the message is private or not
-    $scope.fireSendMessage = function(){
+    $scope.fireSendMessage = function() {
         if(typeof $scope.selectedUser !='object') {
             if($scope.messageMode.private==true){
                 var splitSelected = $scope.selectedUser.split(":");
@@ -63,24 +65,22 @@ chatModule.controller('ChatController', function($scope, $rootScope, Socket, $as
     Socket.emit("getRoomList", {});
     Socket.emit("getUserList", {});
 
-    $scope.messages = [{
-        message: 'Hi there, am a ROBOT! Enjoy with chat :p',
-        nickname: 'ROBOT'
-    }];
+    $rootScope.messages = [];
 
     Socket.on('msgFront', function (msg) {
         $scope.time = new Date();
-        $scope.messages.push(msg);
+        $rootScope.messages.push(msg);
     });
 
     Socket.on('pmsgFront', function (msg) {
         console.log('private ',msg);
             $scope.time = new Date();
-            $scope.messages.push(msg);
+            $rootScope.messages.push(msg);
     });
     
     $scope.sendMessage = function(msg) {
-        Socket.emit("msg", {nickname: $rootScope.user.username, message:msg});
+        console.log($rootScope.activeRoom);
+        Socket.emit("msg", {nickname: $rootScope.user.username, message:msg, toRoom: $rootScope.activeRoom});
         $scope.tmpMessage = '';
     };
 
@@ -105,7 +105,7 @@ chatModule.controller('ChatController', function($scope, $rootScope, Socket, $as
         $scope.aside.text = 'You received a chat invitation from "'+invite.from+'" click on "Accept" to accept it or on "Refuse" to delete it.';
         showChatBox();
 
-         $scope.messages.push({
+         $rootScope.messages.push({
             message: 'You received an invitation from "'+invite.from+'"!',
             nickname: 'ROBOT'
          });

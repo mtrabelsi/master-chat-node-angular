@@ -1,7 +1,7 @@
 var loginModule = angular.module('module.login', []);
 
 loginModule.controller('LoginController', function($scope,$rootScope,$state,$http) {
-
+window.rsc = $rootScope;
 	$scope.nickname = 'marwen';
 	$scope.password = 'trabelsi';
 

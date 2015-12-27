@@ -1,4 +1,5 @@
 chatModule.controller('TabsController', function($q, $scope, $rootScope, $http) {
+window.tab_sc = $scope;
 
     $scope.users = [];
     $scope.search = {
@@ -7,6 +8,7 @@ chatModule.controller('TabsController', function($q, $scope, $rootScope, $http) 
             ousername: ''
       
     };
+    $scope.activeRoom = "" ;
 
 
     $scope.tabs = [{
@@ -40,9 +42,22 @@ chatModule.controller('TabsController', function($q, $scope, $rootScope, $http) 
         var arr = [$rootScope.user.username,fUsername];
        
         $http.post('/api/room/create',{users: arr}).success(function(data){
-            
-            alert("you can chat with "+fUsername+" now! type a message!");
+                    $scope.tabs.activeTab = 'Rooms';
+                    $rootScope.activeRoom = "["+$rootScope.user.username+","+fUsername+"]";
+                    $scope.activeRoom = $rootScope.activeRoom;
+           // alert("you can chat with "+fUsername+" now;! type a message!");
         });
+    }
+    $scope.setCurrentRoom = function(clickedRoom) {
+        $scope.activeRoom = clickedRoom;
+        $rootScope.activeRoom = $scope.activeRoom;
+    }
+
+    $scope.loadMessages = function(clickedRoom) {
+        $http.get('/api/messages/'+clickedRoom).success(function(msgs){
+            $rootScope.messages = msgs;
+        });
+     // alert('loaded msg for '+clickedRoom);
     }
 
     $scope.sendInvitation = function(userId) {

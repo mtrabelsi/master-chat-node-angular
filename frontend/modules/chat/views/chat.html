@@ -7,6 +7,7 @@
            
 
         </div>
+        
         <div class="col-md-7" ng-controller="ChatController">
             <div class="row">
                 <div class="col-md-10">
@@ -28,8 +29,13 @@
                 <div ng-repeat="message in messages">
                     <div class="message">
                         <div ng-if="!message.private">
-                            <i class="fa fa-user fa-lg"></i> <b> {{message.nickname}} ></b> {{message.message}}
-
+                            <span ng-if="message.toRoom==activeRoom">
+                                <i class="fa fa-user fa-lg"></i> <b> {{message.nickname}} ></b> {{message.message}}
+                            </span>
+                             <span ng-if="message.toRoom!=activeRoom">
+                                <i class="fa fa-user fa-lg"></i> <b> ROBOT ></b> message has been filtred! (connect to {{message.toRoom}} to see this)
+                            </span>
+                            
                             <div class="pull-right" style="color: gray;">
                                   <i class="fa fa-clock-o"> </i>  Sent at
                                   <time am-time-ago="time" title="{{ time | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">

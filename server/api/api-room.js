@@ -112,18 +112,20 @@ module.exports = function(app, Room, User, async, io, roomHelper, roomsOwners, c
                 
                 io.sockets.sockets.forEach(function(socket) {
                   if(savedRoom.users.indexOf(socket.nickname)>-1) {
-
-                        socket.room = savedRoom.roomName;
+                        
+                      
                         //check for new room - if the room is new, set his owner to the current connected socket's nickname
-                        if (!roomsOwners[socket.room] && typeof roomsOwners[socket.room] === "undefined") {
-                            roomsOwners[socket.room] = {
+                        if (!roomsOwners[savedRoom.roomName] && typeof roomsOwners[savedRoom.roomName] === "undefined") {
+                            roomsOwners[savedRoom.roomName] = {
                                 ownerName: socket.nickname,
                                 isDefault: false
                             };
                         }
 
-                        socket.join(socket.room);
-                        console.log('User ', csl.fine(socket.nickname), 'have joined', csl.fine(socket.room));
+                        socket.join(savedRoom.roomName);
+                        socket.myJoinedRoom.push(savedRoom.roomName);
+                        
+                        console.log('User ', csl.fine(socket.nickname), 'have joined', csl.fine(savedRoom.roomName));
 
                         //clean out unused rooms - checks if there any unused room and clean them
                         roomHelper.roomsDigest();

@@ -75,19 +75,67 @@ app.get('/', function(req, res) {
 
 // });
 
-
+var User = require('./server/models/user')(mongoose);
+var Room = require('./server/models/room')(mongoose);
+var Message = require('./server/models/message')(mongoose);
 
 //middelware that will be executed for each new connected user
 io.use(function(socket, next) {
     socket.nickname = socket.request._query['nickname'];
+    socket.myJoinedRoom = [];
     console.log('User with nickname ', info(socket.nickname), ' has set his nickname');
     next();
 });
 
+//middelware that will be executed for each new connected user
+io.use(function(socket, next) {
+    
+        roomsOwners[socket.id] = {
+            ownerName: socket.nickname,
+            isDefault: true
+        };
 
-var api = require('./server/api')(app,mongoose,io, roomHelper, roomsOwners, csl);
+        console.log(csl.info('[BEGIN] Rooms Owners :'));
+        console.log(roomsOwners);
+        console.log(csl.info('[END] Rooms Owners'));
+
+    next();
+});
+
+//join at startup
+io.use(function(socket, next) {
+
+     Room.find({users: socket.nickname}, function(err, rooms) {
+              if (err) return console.error(err);
+
+              rooms.forEach(function(room){
+
+                //check for new room - if the room is new, set his owner to the current connected socket's nickname
+                if (!roomsOwners[room.roomName] && typeof roomsOwners[room.roomName] === "undefined") {
+                    roomsOwners[room.roomName] = {
+                        ownerName: socket.nickname,
+                        isDefault: false
+                    };
+                }
+
+                socket.join(room.roomName);
+                socket.myJoinedRoom.push(room.roomName);
+                
+                console.log('User ', csl.fine(socket.nickname), 'have joined', csl.fine(room.roomName));
+
+                //clean out unused rooms - checks if there any unused room and clean them
+                roomHelper.roomsDigest();
+
+              });
+                 
+              });
+    next();
+});
+
+
+var api = require('./server/api')(Message, User, Room, app, mongoose,io, roomHelper, roomsOwners, csl);
 //events
-var events = require('./server/events')(io, roomsOwners, userHelper, roomHelper, csl);
+var events = require('./server/events')(io, roomsOwners, userHelper, roomHelper, csl, Message);
 
 
 var port = process.env.PORT || 8080; // set our port

@@ -1,17 +1,7 @@
-module.exports = function(io, roomsOwners, userHelper, roomHelper, csl) {
+module.exports = function(io, roomsOwners, userHelper, roomHelper, csl, Message) {
 
 
     io.on('connection', function(socket) {
-
-        roomsOwners[socket.id] = {
-            ownerName: socket.nickname,
-            isDefault: true
-        };
-
-        console.log(csl.info('[BEGIN] Rooms Owners :'));
-        console.log(roomsOwners);
-        console.log(csl.info('[END] Rooms Owners'));
-
 
         /********* @pmsg *********
         Description : This event handle sending users private messages - the server will look for that user using his nickname
@@ -89,13 +79,39 @@ module.exports = function(io, roomsOwners, userHelper, roomHelper, csl) {
         Params      : msg object {message: STRING, nickname: STRING} - where the nickname is the
         sender of the message
         **********           **********/
+
+        /*
+
+ var messageSchema = new Schema({
+        roomName: String,
+        user: String,
+        content: String,
+        created: Date,
+        updated: Date
+    });
+
+        */
         socket.on('msg', function(msg) {
-            if (socket.room && typeof socket.room != "undefined") {
-                io.sockets.to(socket.room).emit('msgFront', msg);
+            if (typeof socket.myJoinedRoom != "undefined" && socket.myJoinedRoom.indexOf(msg.toRoom)!=-1) {
+        //Socket.emit("msg", {nickname: $rootScope.user.username, message:msg, toRoom: $rootScope.activeRoom});
+
+                var message = new Message({
+                    toRoom: msg.toRoom,
+                    nickname: msg.nickname,
+                    message: msg.message
+                });
+
+                message.save(function(err, savedMessage) {
+                    if (err) return console.error(err);
+                    
+                    io.sockets.to(msg.toRoom).emit('msgFront', msg);
+
+                });
+
             } else {
                 io.sockets.to(socket.id).emit('msgFront', {
                     nickname: 'ROBOT',
-                    message: 'You cant send message to other rooms, please join at least a room then try again!'
+                    message: 'You cant send message to rooms your not connected in, please join this room then try again!'
                 });
             }
         });
@@ -131,16 +147,16 @@ module.exports = function(io, roomsOwners, userHelper, roomHelper, csl) {
                     socket.leave(socket.room);
                 }
 */
-                socket.room = room.roomName;
+                socket.myJoinedRoom.push(room.roomName);
                 //check for new room - if the room is new, set his owner to the current connected socket's nickname
-                if (!roomsOwners[socket.room] && typeof roomsOwners[socket.room] === "undefined") {
-                    roomsOwners[socket.room] = {
+                if (!roomsOwners[room.roomName] && typeof roomsOwners[room.roomName] === "undefined") {
+                    roomsOwners[room.roomName] = {
                         ownerName: socket.nickname,
                         isDefault: false
                     };
                 }
-                socket.join(socket.room);
-                console.log('User ', csl.fine(socket.nickname), 'have joined', csl.fine(socket.room));
+                socket.join(room.roomName);
+                console.log('User ', csl.fine(socket.nickname), 'have joined', csl.fine(room.roomName));
 
                 //clean out unused rooms - checks if there any unused room and clean them
                 roomHelper.roomsDigest();
