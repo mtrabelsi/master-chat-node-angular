@@ -135,7 +135,7 @@ io.use(function(socket, next) {
 
 var api = require('./server/api')(Message, User, Room, app, mongoose,io, roomHelper, roomsOwners, csl);
 //events
-var events = require('./server/events')(io, roomsOwners, userHelper, roomHelper, csl, Message);
+var events = require('./server/events')(io, roomsOwners, userHelper, roomHelper, csl, Message, Room);
 
 
 var port = process.env.PORT || 8080; // set our port

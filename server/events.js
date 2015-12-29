@@ -1,4 +1,4 @@
-module.exports = function(io, roomsOwners, userHelper, roomHelper, csl, Message) {
+module.exports = function(io, roomsOwners, userHelper, roomHelper, csl, Message, Room) {
 
 
     io.on('connection', function(socket) {
@@ -140,13 +140,82 @@ module.exports = function(io, roomsOwners, userHelper, roomHelper, csl, Message)
         Description : This event handle room join and leave and all related info
         Params      : room object {join: BOOLEAN, roomName: STRING}
         **********           **********/
-        socket.on('roomEvent', function(room) {
-            if (room.join == true) {
+socket.on('roomEvent', function(roomP) {
+
+    if (roomP.join == true) {
                 //leave the previous joined room - make sure that we join one room at the same time and it's not the default room
   /*              if (socket.room != room.roomName && socket.room != socket.id) {
                     socket.leave(socket.room);
                 }
 */
+
+/*
+    var roomSchema = new Schema({
+        roomName: String,
+        users: [String],
+        created: Date,
+        updated: Date
+    });
+*/
+
+        Room.find({roomName:roomP.roomName},function(err,rooms) {
+          if (err) return console.error(err);
+
+        
+            console.log(roomP);
+            
+               var room = new Room({
+                    roomName: roomP.roomName,
+                    users: roomP.users
+                });
+
+
+                if(rooms.length==0)
+                room.save(function(err, savedRoom) {
+                    if (err) return console.error(err);
+
+                
+                    io.sockets.sockets.forEach(function(sock) {
+                      if(savedRoom.users.indexOf(sock.nickname)>-1) {
+                                                  
+                            //check for new room - if the room is new, set his owner to the current connected socket's nickname
+                            if (!roomsOwners[savedRoom.roomName] && typeof roomsOwners[savedRoom.roomName] === "undefined") {
+                                roomsOwners[savedRoom.roomName] = {
+                                    ownerName: sock.nickname,
+                                    isDefault: false
+                                };
+                            }
+
+                            sock.join(savedRoom.roomName);
+                            sock.myJoinedRoom.push(savedRoom.roomName);
+
+                            Room.find({users: sock.nickname}, function(err, rms) {
+                             if (err) return console.error(err);
+
+                             io.to(sock.id).emit('roomList', {
+                                                         rooms: rms
+                                                        });
+
+                            });
+                            
+                            console.log('User ', csl.fine(sock.nickname), 'have joined', csl.fine(savedRoom.roomName));
+                            //clean out unused rooms - checks if there any unused room and clean them
+                            roomHelper.roomsDigest();
+                           // roomList();
+                      }
+                    });
+
+                // res.send(savedRoom);
+                });
+              else
+                console.log("else");
+                //res.send([]);
+                
+            });//end check
+
+
+    }
+/*
                 socket.myJoinedRoom.push(room.roomName);
                 //check for new room - if the room is new, set his owner to the current connected socket's nickname
                 if (!roomsOwners[room.roomName] && typeof roomsOwners[room.roomName] === "undefined") {
@@ -161,7 +230,7 @@ module.exports = function(io, roomsOwners, userHelper, roomHelper, csl, Message)
                 //clean out unused rooms - checks if there any unused room and clean them
                 roomHelper.roomsDigest();
             } else {
-                console.log("leaveeeeeeeeeeeeeeeeeeeeeeeeeeeeeee!!!");
+                console.log("##########leave############");
                 if (room.roomName == socket.id) {
                     io.sockets.to(socket.id).emit('msgFront', {
                         nickname: 'ROBOT',
@@ -179,7 +248,9 @@ module.exports = function(io, roomsOwners, userHelper, roomHelper, csl, Message)
             }
 
             roomList();
-        });
+            */
+    });
+
         /********* @disconnect *********
         Description : This event handle user disconnection and related infos
         Params      : NO PARAMS
@@ -188,13 +259,13 @@ module.exports = function(io, roomsOwners, userHelper, roomHelper, csl, Message)
             console.log(csl.error('User <' + socket.nickname + '> disconnected'));
             //clean out unused rooms - checks if there any unused room and clean them
             roomHelper.roomsDigest();
-            roomList();
+           // roomList();
         });
 
-        function roomList() {
-            var rooms = roomHelper.getRoomsList();
 
-            io.emit('roomList', {
+        function roomList(targetRoom) {
+            var rooms = roomHelper.getRoomsList();
+            io.to(targetRoom).emit('roomList', {
                 rooms: rooms
             });
         }

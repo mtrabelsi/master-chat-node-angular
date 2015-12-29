@@ -1,4 +1,4 @@
-chatModule.controller('TabsController', function($q, $scope, $rootScope, $http) {
+chatModule.controller('TabsController', function($q, $scope, $rootScope, $http, Socket) {
 window.tab_sc = $scope;
 
     $scope.users = [];
@@ -9,6 +9,31 @@ window.tab_sc = $scope;
       
     };
     $scope.activeRoom = "" ;
+
+    $scope.tags = [];
+
+    Socket.on('roomList', function(data) {
+       $scope.rooms   = data.rooms;
+       // alert("rooms received "+JSON.stringify(data));
+    });
+
+    $scope.createRoom = function(entredRoom) {
+       var users = [$rootScope.user.username];
+
+
+       $scope.tags.forEach(function(tag) {
+        users.push(tag.username)
+       }) ;
+
+
+
+        Socket.emit("roomEvent", {roomName: entredRoom, join:true,users:users});
+       $scope.tags = [];
+    }
+
+    $scope.loadUsers = function() {
+        return $http.get('/api/user/friends/'+$rootScope.user._id+'?q='+$scope.search.fusername);
+    }
 
 
     $scope.tabs = [{

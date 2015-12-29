@@ -85,7 +85,7 @@ window.chat_sc = $scope;
     };
 
     $scope.createRoom = function() {
-         Socket.emit("roomEvent", {roomName: $scope.room, join:true});
+       //  Socket.emit("roomEvent", {roomName: $scope.room, join:true});
     }
     $scope.joinRoom = function(room) {
          Socket.emit("roomEvent", {roomName: room, join:true});
@@ -111,10 +111,7 @@ window.chat_sc = $scope;
          });
     });
 
-    Socket.on('roomList', function(data) {
-      $scope.rooms   = data.rooms;
-    });
-
+  
     Socket.on('userList', function(data) {
         $scope.users = data.users;
     });

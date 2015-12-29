@@ -1,11 +1,16 @@
-     		<div class="list-group">
+     	    <br />
+            <div class="list-group">
                 <div class="row">
                     <div class="col-md-8">
-                        <input type="text" class="form-control" ng-model="room" placeholder="Créer une room" />
+                        <input type="text" class="form-control" ng-model="room" placeholder="Room name" />
+                        <tags-input ng-model="tags" placeholder="Add some friends here" display-property="username">
+                              <auto-complete source="loadUsers()"></auto-complete>
+                        </tags-input>
+
                     </div>
                     <div class="col-md-4">
-                        <button type="button" class="btn btn-warning" ng-click="createRoom();room='';">
-                            <i class="fa fa-plus"></i> Créer 
+                        <button type="button" class="btn btn-warning" ng-click="createRoom(room);room='';">
+                            <i class="fa fa-plus"></i> Create 
                         </button>
                     </div>
                 </div>
