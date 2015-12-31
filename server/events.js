@@ -1,5 +1,6 @@
 module.exports = function(io, roomsOwners, userHelper, roomHelper, csl, Message, Room) {
-
+var invitedUsers = [];
+var acceptedInviteUsers = [];
 
     io.on('connection', function(socket) {
 
@@ -136,6 +137,36 @@ module.exports = function(io, roomsOwners, userHelper, roomHelper, csl, Message,
          console.log(warn('[END] Rooms Owners '));
          }
          */
+
+
+
+         socket.on('acceptInvite', function(accept) {
+           
+            Room.findOne({roomName:accept.roomName},function(err,room) {
+                 if (err) return console.error(err);
+
+                room.users.push(accept.nickname);
+
+                room.save(function(err, savedRoom) {
+                    if (err) return console.error(err);
+
+                            socket.join(savedRoom.roomName);
+                            socket.myJoinedRoom.push(savedRoom.roomName);
+
+                            Room.find({users: socket.nickname}, function(err, rms) {
+                             if (err) return console.error(err);
+
+                             io.to(socket.id).emit('roomList', {
+                                                         rooms: rms
+                                                        });
+
+                            });
+
+                });
+            });
+
+        });
+
         /********* @roomEvent *********
         Description : This event handle room join and leave and all related info
         Params      : room object {join: BOOLEAN, roomName: STRING}
@@ -157,12 +188,62 @@ socket.on('roomEvent', function(roomP) {
         updated: Date
     });
 */
+if(roomP.invite==true) {
+
+ Room.find({roomName:roomP.roomName},function(err,rooms) {
+          if (err) return console.error(err);
+
+            
+               var room = new Room({
+                    roomName: roomP.roomName,
+                    users: [socket.nickname]
+                });
+
+
+                if(rooms.length==0)
+                room.save(function(err, savedRoom) {
+                    if (err) return console.error(err);
+
+                         socket.join(savedRoom.roomName);
+                         socket.myJoinedRoom.push(savedRoom.roomName);
+                         
+                         Room.find({users: socket.nickname}, function(err, rms) {
+                             if (err) return console.error(err);
+
+                             io.to(socket.id).emit('roomList', {
+                                                         rooms: rms
+                                                        });
+
+                            });
+
+                    //after creating the room with just one user
+                    io.sockets.sockets.forEach(function(sock) {
+
+
+                        if((roomP.users.indexOf(sock.nickname)>-1)&&socket.nickname!=sock.nickname) {
+                               io.sockets.to(sock.id).emit('inviteFront', {
+                                            from: socket.nickname,
+                                            room: roomP.roomName
+                                        });
+
+                              console.log("invited", sock.nickname);
+                             }
+
+                        });
+
+
+
+                });
+        });
+
+
+
+return;
+}
 
         Room.find({roomName:roomP.roomName},function(err,rooms) {
           if (err) return console.error(err);
 
-        
-            console.log(roomP);
             
                var room = new Room({
                     roomName: roomP.roomName,

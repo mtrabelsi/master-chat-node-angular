@@ -87,8 +87,10 @@ window.chat_sc = $scope;
     $scope.createRoom = function() {
        //  Socket.emit("roomEvent", {roomName: $scope.room, join:true});
     }
+    
+    //    Socket.emit("roomEvent", {roomName: entredRoom, join:true, users:users, invite: $scope.button.invite});
     $scope.joinRoom = function(room) {
-         Socket.emit("roomEvent", {roomName: room, join:true});
+         Socket.emit("acceptInvite", {roomName: room, nickname: $rootScope.user.username});
     }
     $scope.leaveRoom = function(room) {
          Socket.emit("roomEvent", {roomName: room, join:false});
@@ -100,15 +102,16 @@ window.chat_sc = $scope;
 
 
     Socket.on('inviteFront', function(invite) {
+    
         $scope.aside.title = invite.from+' invitation';
         $scope.aside.invitedRoom = invite.room;
         $scope.aside.text = 'You received a chat invitation from "'+invite.from+'" click on "Accept" to accept it or on "Refuse" to delete it.';
         showChatBox();
 
-         $rootScope.messages.push({
+         /*$rootScope.messages.push({
             message: 'You received an invitation from "'+invite.from+'"!',
             nickname: 'ROBOT'
-         });
+         });*/
     });
 
   

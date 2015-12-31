@@ -58,7 +58,7 @@ module.exports = function(app, Room, User, async, io, roomHelper, roomsOwners, c
     */
 
 //return the rooms where the username is subcribed in
-  app.get('/api/room/:username', function(req, res) { 
+  app.get('/api/room/:username', function(req, res) {
          Room.find({users: req.params.username}, function(err, rooms) {
               if (err) return console.error(err);
 
@@ -84,8 +84,9 @@ module.exports = function(app, Room, User, async, io, roomHelper, roomsOwners, c
         var roomName = "";
 
        // async.map(req.body.users, populateUser, function(err, populatedUsers) {
-            
-            req.body.users.forEach(function(usr){
+        var users = req.body.users.sort();
+
+            users.forEach(function(usr) {
               if(roomName=="")
                 roomName = "["+usr;
               else
@@ -94,14 +95,12 @@ module.exports = function(app, Room, User, async, io, roomHelper, roomsOwners, c
 
             roomName = roomName+"]";
 
-      Room.find({roomName:roomName},function(err,rooms){
+      Room.find({roomName:roomName},function(err,rooms) {
           if (err) return console.error(err);
-
-        
             
                var room = new Room({
                     roomName: roomName,
-                    users: req.body.users
+                    users: users
                 });
 
 
@@ -112,7 +111,6 @@ module.exports = function(app, Room, User, async, io, roomHelper, roomsOwners, c
                 
                 io.sockets.sockets.forEach(function(socket) {
                   if(savedRoom.users.indexOf(socket.nickname)>-1) {
-                        
                       
                         //check for new room - if the room is new, set his owner to the current connected socket's nickname
                         if (!roomsOwners[savedRoom.roomName] && typeof roomsOwners[savedRoom.roomName] === "undefined") {
@@ -130,7 +128,6 @@ module.exports = function(app, Room, User, async, io, roomHelper, roomsOwners, c
                         //clean out unused rooms - checks if there any unused room and clean them
                         roomHelper.roomsDigest();
                         // roomList();
-                   
 
                   }
 

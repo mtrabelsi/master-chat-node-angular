@@ -5,7 +5,11 @@
                         <input type="text" class="form-control" ng-model="room" placeholder="Room name" />
                         <tags-input ng-model="tags" placeholder="Add some friends here" display-property="username">
                               <auto-complete source="loadUsers()"></auto-complete>
-                        </tags-input>
+                        </tags-input> 
+
+                    <div class="btn-group" ng-model="button" bs-checkbox-group>
+                      <label class="btn btn-default"><input type="checkbox" value="invite"> invite</label>
+                    </div>
 
                     </div>
                     <div class="col-md-4">

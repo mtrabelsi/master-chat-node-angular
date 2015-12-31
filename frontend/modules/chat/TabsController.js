@@ -8,6 +8,11 @@ window.tab_sc = $scope;
             ousername: ''
       
     };
+
+    $scope.button = {
+        invite : false
+    };
+
     $scope.activeRoom = "" ;
 
     $scope.tags = [];
@@ -18,16 +23,13 @@ window.tab_sc = $scope;
     });
 
     $scope.createRoom = function(entredRoom) {
-       var users = [$rootScope.user.username];
-
+        var users = [$rootScope.user.username];
 
        $scope.tags.forEach(function(tag) {
         users.push(tag.username)
        }) ;
 
-
-
-        Socket.emit("roomEvent", {roomName: entredRoom, join:true,users:users});
+        Socket.emit("roomEvent", {roomName: entredRoom, join:true, users:users, invite: $scope.button.invite});
        $scope.tags = [];
     }
 
@@ -68,8 +70,12 @@ window.tab_sc = $scope;
        
         $http.post('/api/room/create',{users: arr}).success(function(data){
                     $scope.tabs.activeTab = 'Rooms';
-                    $rootScope.activeRoom = "["+$rootScope.user.username+","+fUsername+"]";
-                    $scope.activeRoom = $rootScope.activeRoom;
+
+                    if(data.length>0) {
+                        $rootScope.activeRoom = "["+$rootScope.user.username+","+fUsername+"]";
+                        $scope.activeRoom = $rootScope.activeRoom;
+                    }
+
            // alert("you can chat with "+fUsername+" now;! type a message!");
         });
     }
