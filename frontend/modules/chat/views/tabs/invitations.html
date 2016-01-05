@@ -3,8 +3,8 @@
 <div class="list-group">
     <ul class="nav nav-pills nav-stacked" ng-repeat="invit in invitations">
         <li role="presentation"><a href="#"><i class="fa fa-user"></i> invite from <b> {{invit.username}}</b> </a> 
-        <button ng-click="accept(true,invit._id)" class="btn-success accept-icone"><i class="fa fa-check"></i></button>
-        <button ng-click="accept(false,invit._id)" class="btn-danger decline-icone"><i class="fa fa-times"></i></button> 
+        <button ng-click="accept(true,invit._id)" class="btn-success accept-icone btn-xs"><i class="fa fa-check"></i></button>
+        <button ng-click="accept(false,invit._id)" class="btn-danger decline-icone btn-xs"><i class="fa fa-times"></i></button> 
 
         </li>
     </ul>

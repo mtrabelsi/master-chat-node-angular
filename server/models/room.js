@@ -6,6 +6,7 @@ module.exports = function(mongoose) {
     var roomSchema = new Schema({
         roomName: String,
         users: [String],
+        custom: { type: Boolean, default: false },
         created: Date,
         updated: Date
     });

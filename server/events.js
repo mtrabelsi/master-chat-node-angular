@@ -196,7 +196,8 @@ if(roomP.invite==true) {
             
                var room = new Room({
                     roomName: roomP.roomName,
-                    users: [socket.nickname]
+                    users: [socket.nickname],
+                    custom: true
                 });
 
 

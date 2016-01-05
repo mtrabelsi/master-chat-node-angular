@@ -1,17 +1,14 @@
 <br />
 <div class="list-group">
     <div class="input-group">
-        <span class="input-group-btn">
-        <button class="btn btn-default" type="button">Go!</button>
-      </span>
-        <input type="text" ng-keyup="search('friends')" ng-model="search.fusername" class="form-control" placeholder="Search for a friend" />
+        <input type="text" ng-keyup="search('friends')" ng-model="search.fusername" class="form-control input-sm" placeholder="Search for a friend" />
     </div>
     <ul class="nav nav-pills nav-stacked" ng-repeat="friend in friends">
         <li role="presentation"><a href="#"><i class="fa fa-user"></i> {{friend.username}}</a> 
 
- <button ng-click="startConversation(friend.username)" class="btn-success accept-icone"><i class="fa fa-comment"></i></button> 
+ <button ng-click="startConversation(friend.username)" class="btn-success accept-icone btn-xs"><i class="fa fa-comment"></i></button> 
 
- <button ng-click="unfriend(friend._id)" class="btn-danger decline-icone"><i class="fa fa-user-times"></i></button> 
+ <button ng-click="unfriend(friend._id)" class="btn-danger decline-icone btn-xs"><i class="fa fa-user-times"></i></button> 
 
         </li>
     </ul>

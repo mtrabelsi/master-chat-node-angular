@@ -14,8 +14,12 @@ background-color: silver;
 }
 #chatBox {
     font-style: italic;
-    font-size: 10pt;
+    font-size: 8pt;
 }
+#roomList {
+    font-size: 8pt;
+}
+
 .form-signin
 {
     max-width: 330px;

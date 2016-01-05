@@ -2,19 +2,15 @@
             <div class="list-group">
                 <div class="row">
                     <div class="col-md-8">
-                        <input type="text" class="form-control" ng-model="room" placeholder="Room name" />
-                        <tags-input ng-model="tags" placeholder="Add some friends here" display-property="username">
+                        <input type="text" class="form-control input-sm" ng-model="room" placeholder="Room name" />
+                        <tags-input class="ti-input-sm" ng-model="tags" placeholder="Add some friends here" display-property="username">
                               <auto-complete source="loadUsers()"></auto-complete>
                         </tags-input> 
 
-                    <div class="btn-group" ng-model="button" bs-checkbox-group>
-                      <label class="btn btn-default"><input type="checkbox" value="invite"> invite</label>
-                    </div>
-
                     </div>
                     <div class="col-md-4">
-                        <button type="button" class="btn btn-warning" ng-click="createRoom(room);room='';">
-                            <i class="fa fa-plus"></i> Create 
+                        <button type="button" class="btn btn-success btn-xs" ng-click="createRoom(room, false);room='';">
+                            <i class="fa fa-plus"></i> Chat now 
                         </button>
                     </div>
                 </div>
@@ -34,11 +30,11 @@
                     ]
                 }
                 -->
-                 <div class="row" ng-repeat="room in rooms" >
+                 <div class="row" ng-repeat="room in roomsLeft" >
                     <div class="col-md-10">
                         <!-- ng-click="joinRoom(room.name)" -->
-                        <a href="#" class="list-group-item" ng-class="{active: room.roomName==activeRoom}" ng-click="setCurrentRoom(room.roomName);loadMessages(room.roomName);">
-                            <i class="fa fa-signal fa-lg"></i> {{room.roomName}}
+                        <a href="#" ng-if="room.custom==false" class="list-group-item" ng-class="{active: room.roomName==activeRoom}" ng-click="setCurrentRoom(room.roomName);loadMessages(room.roomName);">
+                            <i class="fa fa-signal"></i> {{room.roomName}}
                             <span class="badge"> {{room.users.length}}</span>
                         </a> 
                     </div>

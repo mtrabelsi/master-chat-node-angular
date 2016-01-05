@@ -1,14 +1,12 @@
-        <div class="col-md-5" ng-controller="TabsController">
-            <div bs-active-pane="tabs.activeTab" bs-tabs>
-              <div ng-repeat="tab in tabs" title="{{ tab.title }}" name="{{ tab.title }}" bs-pane>
+        <div class="col-md-4" ng-controller="TabsController">
+            <div bs-active-pane="tabsLeft.activeTab" class="input-sm" bs-tabs>
+              <div ng-repeat="tab in tabsLeft" title="{{ tab.title }}" name="{{ tab.title }}" bs-pane>
                 <div ng-include="tab.page"></div>
               </div>
             </div> 
-           
-
         </div>
         
-        <div class="col-md-7" ng-controller="ChatController">
+        <div class="col-md-5" ng-controller="ChatController">
             <div class="row">
                 <div class="col-md-10">
                 <!--
@@ -30,11 +28,11 @@
                     <div class="message">
                         <div ng-if="!message.private">
                             <span ng-if="message.toRoom==activeRoom">
-                                <i class="fa fa-user fa-lg"></i> <b> {{message.nickname}} ></b> {{message.message}}
+                                <i class="fa fa-user"></i> <b> {{message.nickname}} ></b> {{message.message}}
                             </span>
-                             <span ng-if="message.toRoom!=activeRoom">
-                                <i class="fa fa-user fa-lg"></i> <b> ROBOT ></b> message has been filtred! (connect to {{message.toRoom}} to see this)
-                            </span>
+                        <!--     <span ng-if="message.toRoom!=activeRoom">
+                                <i class="fa fa-user"></i> <b> ROBOT ></b> message has been filtred! (connect to {{message.toRoom}} to see this)
+                            </span>  -->
                             
                             <div class="pull-right" style="color: gray;">
                                   <i class="fa fa-clock-o"> </i>  Sent at
@@ -58,6 +56,25 @@
             </div>
         </div>
 
+
+        <div class="col-md-3" ng-controller="TabsController">
+            <div bs-active-pane="tabsRight.activeTab" class="input-sm" bs-tabs>
+              <div ng-repeat="tab in tabsRight" title="{{ tab.title }}" name="{{ tab.title }}" bs-pane>
+                <div ng-include="tab.page"></div>
+              </div>
+            </div> 
+        </div>
+
+       <!-- <div class="col-md-3" ng-controller="TabsController">
+            <div bs-active-pane="tabs.activeTab" bs-tabs>
+              <div ng-repeat="tab in tabs" title="{{ tab.title }}" name="{{ tab.title }}" bs-pane>
+                <div ng-include="tab.page"></div>
+              </div>
+            </div> 
+           
+
+        </div>
+        -->
         <!-- list of users of a specif room
         <div class="col-md-3">
             <div class="list-group" ng-init="clicked = 'none'">

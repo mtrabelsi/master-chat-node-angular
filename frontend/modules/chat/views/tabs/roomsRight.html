@@ -1,0 +1,50 @@
+     	    <br />
+            <div class="list-group">
+                <div class="row">
+                    <div class="col-md-8">
+                        <input type="text" class="form-control input-sm" ng-model="room" placeholder="Room name" />
+                        <tags-input class="ti-input-sm" ng-model="tags" placeholder="Add some friends here" display-property="username">
+                              <auto-complete source="loadUsers()"></auto-complete>
+                        </tags-input> 
+
+                    </div>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-warning btn-xs" ng-click="createRoom(room, true);room='';">
+                            <i class="fa fa-plus"></i> Invite to Chat
+                        </button>
+                    </div>
+                </div>
+
+                <br/>
+
+                <!-- 
+                {
+                    "_id": "567c787e947fad30167944d6",
+                    "created": "2015-12-24T22:58:06.364Z",
+                    "updated": "2015-12-24T22:58:06.364Z",
+                    "roomName": "[marwen,user1]",
+                    "__v": 0,
+                    "users": [
+                      "marwen",
+                      "user1"
+                    ]
+                }
+                -->
+                 <div class="row" ng-repeat="room in roomsRight" >
+                    <div class="col-md-10">
+                        <!-- ng-click="joinRoom(room.name)" -->
+                        <a href="#" ng-if="room.custom==true" class="list-group-item" ng-class="{active: room.roomName==activeRoom}" ng-click="setCurrentRoom(room.roomName);loadMessages(room.roomName);">
+                            <i class="fa fa-signal"></i> {{room.roomName}}
+                            <span class="badge"> {{room.users.length}}</span>
+                        </a> 
+                    </div>
+                    <!--
+                    <div class="col-md-2">
+
+                        <button type="button" class="btn btn-danger" ng-click="leaveRoom(room.name)">
+                                    <i class="fa fa-sign-out"></i> Leave 
+                                </button>
+                    </div>
+                    -->
+                 </div>
+            </div> 

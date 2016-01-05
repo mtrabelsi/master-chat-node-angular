@@ -9,27 +9,26 @@ window.tab_sc = $scope;
       
     };
 
-    $scope.button = {
-        invite : false
-    };
-
     $scope.activeRoom = "" ;
 
     $scope.tags = [];
 
+
+//we need to test here if the room for the right or the left !!!!!!!!!!!!
     Socket.on('roomList', function(data) {
-       $scope.rooms   = data.rooms;
+       $scope.roomsLeft  = data.rooms;
+       $scope.roomsRight  = data.rooms;
        // alert("rooms received "+JSON.stringify(data));
     });
 
-    $scope.createRoom = function(entredRoom) {
+    $scope.createRoom = function(entredRoom, invite) {
         var users = [$rootScope.user.username];
 
        $scope.tags.forEach(function(tag) {
         users.push(tag.username)
        }) ;
 
-        Socket.emit("roomEvent", {roomName: entredRoom, join:true, users:users, invite: $scope.button.invite});
+        Socket.emit("roomEvent", {roomName: entredRoom, join:true, users:users, invite: invite});
        $scope.tags = [];
     }
 
@@ -38,9 +37,9 @@ window.tab_sc = $scope;
     }
 
 
-    $scope.tabs = [{
+    $scope.tabsLeft = [{
         "title": "Rooms",
-        "page": "modules/chat/views/tabs/rooms.html"
+        "page": "modules/chat/views/tabs/roomsLeft.html"
     }, {
         "title": "Friends",
         "page": "modules/chat/views/tabs/friends.html"
@@ -51,8 +50,16 @@ window.tab_sc = $scope;
         "title": "Invitations",
         "page": "modules/chat/views/tabs/invitations.html"
     }];
-    $scope.changeTab = function(tab){
-        $scope.tabs.activeTab = tab;
+    $scope.changeTabLeft = function(tab){
+        $scope.tabsLeft.activeTab = tab;
+    }
+
+    $scope.tabsRight = [{
+        "title": "Chat Rooms",
+        "page": "modules/chat/views/tabs/roomsRight.html"
+    }];
+    $scope.changeTabRight = function(tab){
+        $scope.tabsRight.activeTab = tab;
     }
 
     $scope.unfriend = function(userId) {
@@ -69,7 +76,7 @@ window.tab_sc = $scope;
         var arr = [$rootScope.user.username,fUsername];
        
         $http.post('/api/room/create',{users: arr}).success(function(data){
-                    $scope.tabs.activeTab = 'Rooms';
+                    $scope.tabsLeft.activeTab = 'Rooms';
 
                     if(data.length>0) {
                         $rootScope.activeRoom = "["+$rootScope.user.username+","+fUsername+"]";
@@ -111,34 +118,45 @@ window.tab_sc = $scope;
         }
     }
 
-    $scope.tabs.activeTab = "Rooms";
+    $scope.tabsLeft.activeTab = "Rooms";
+    $scope.tabsRight.activeTab = "Chat Rooms";
 
-    var handleTabChange = function() {
-
-        if($scope.tabs.activeTab=="Friends") {
+    var handleTabLeftChange = function() {
+        if($scope.tabsLeft.activeTab=="Friends") {
             $scope.search('friends');
         }
 
-        if($scope.tabs.activeTab=="Search") {
+        if($scope.tabsLeft.activeTab=="Search") {
             $scope.search('other')
         }
 
-        if($scope.tabs.activeTab=="Invitations") {
+        if($scope.tabsLeft.activeTab=="Invitations") {
             $http.get('/api/user/invitations/'+$rootScope.user._id).success(function(invitations){
                 $scope.invitations = invitations;
             });
         }
 
-       if($scope.tabs.activeTab=="Rooms") {
+       if($scope.tabsLeft.activeTab=="Rooms") {
             $http.get('/api/room/'+$rootScope.user.username).success(function(rms){
-                $scope.rooms = rms;
+                $scope.roomsLeft = rms;
             });
         }
-
-
     };
 
-    $scope.$watch('tabs.activeTab',handleTabChange);
+    var handleTabRightChange = function() {
+        if($scope.tabsRight.activeTab=="Friends") {
+            $scope.search('friends');
+        }
+
+       if($scope.tabsRight.activeTab=="Chat Rooms") {
+            $http.get('/api/room/'+$rootScope.user.username).success(function(rms){
+                $scope.roomsRight = rms;
+            });
+        }
+    };
+
+    $scope.$watch('tabsLeft.activeTab',handleTabLeftChange);
+    $scope.$watch('tabsRight.activeTab',handleTabRightChange);
 
     $scope.signup = function() {
         $http.post('/api/users/get').success(function(data) {
