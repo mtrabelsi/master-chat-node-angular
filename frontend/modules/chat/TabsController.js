@@ -38,7 +38,7 @@ window.tab_sc = $scope;
 
 
     $scope.tabsLeft = [{
-        "title": "Rooms",
+        "title": "Discussion",
         "page": "modules/chat/views/tabs/roomsLeft.html"
     }, {
         "title": "Friends",
@@ -76,7 +76,7 @@ window.tab_sc = $scope;
         var arr = [$rootScope.user.username,fUsername];
        
         $http.post('/api/room/create',{users: arr}).success(function(data){
-                    $scope.tabsLeft.activeTab = 'Rooms';
+                    $scope.tabsLeft.activeTab = 'Discussion';
 
                     if(data.length>0) {
                         $rootScope.activeRoom = "["+$rootScope.user.username+","+fUsername+"]";
@@ -118,7 +118,7 @@ window.tab_sc = $scope;
         }
     }
 
-    $scope.tabsLeft.activeTab = "Rooms";
+    $scope.tabsLeft.activeTab = "Discussion";
     $scope.tabsRight.activeTab = "Chat Rooms";
 
     var handleTabLeftChange = function() {
@@ -136,7 +136,7 @@ window.tab_sc = $scope;
             });
         }
 
-       if($scope.tabsLeft.activeTab=="Rooms") {
+       if($scope.tabsLeft.activeTab=="Discussion") {
             $http.get('/api/room/'+$rootScope.user.username).success(function(rms){
                 $scope.roomsLeft = rms;
             });

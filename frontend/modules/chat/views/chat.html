@@ -1,5 +1,5 @@
         <div class="col-md-4" ng-controller="TabsController">
-            <div bs-active-pane="tabsLeft.activeTab" class="input-sm" bs-tabs>
+            <div style="font-size: 8pt;" bs-active-pane="tabsLeft.activeTab" class="input-sm" bs-tabs>
               <div ng-repeat="tab in tabsLeft" title="{{ tab.title }}" name="{{ tab.title }}" bs-pane>
                 <div ng-include="tab.page"></div>
               </div>
