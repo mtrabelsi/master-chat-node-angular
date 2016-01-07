@@ -171,9 +171,9 @@ window.tab_sc = $scope;
             $scope.friends = friends;
         });
         else
-            $http.get('/api/users/get'+'?q='+$scope.search.ousername).success(function(users){
+            $http.get('/api/users/get'+'?q='+$scope.search.ousername+'&me='+$rootScope.user._id).success(function(users){
                 $scope.users = users;
-
+             
             });
     }
 

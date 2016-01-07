@@ -177,7 +177,11 @@ module.exports = function(app, User) {
                 .exec(function(err,users) {
                   if (err) return console.error(err);
 
-            
+                    users.forEach(function(user,i){
+                      if(user._id==req.query.me){
+                         users.splice(i, 1);
+                      }
+                    }); 
 
                     res.send(users);
                 });
