@@ -3,6 +3,17 @@
   top: 20%;
   left: 70%;
 }
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    z-index: 2;
+     color: black;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+.room-member-icone {
+  position: absolute;
+  top: 20%;
+  left: 80%;
+}
 .decline-icone {
   position: absolute;
   top: 20%;

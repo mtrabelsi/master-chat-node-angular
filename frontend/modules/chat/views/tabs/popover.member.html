@@ -1,0 +1,19 @@
+<div class="popover" style="width:70%;">
+  <div class="arrow"></div>
+  <h3 class="popover-title">Members</h3>
+  <div class="popover-content">
+
+  <span ng-repeat="member in room.users">
+
+  	<button ng-if="member!=user.username" class="btn btn-success btn-xs"><i class="fa fa-comment"  ng-click="startConversation(member)"></i></button> 
+
+  	<button ng-if="member==user.username" class="btn btn-default btn-xs"><i class="fa fa-comment" ></i></button> 
+
+  	<a ng-disabled="member==user.username" href="#">{{member}}</a></br>  
+  </span>
+
+
+
+
+  </div>
+</div>

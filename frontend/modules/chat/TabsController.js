@@ -1,5 +1,6 @@
-chatModule.controller('TabsController', function($q, $scope, $rootScope, $http, Socket) {
+chatModule.controller('TabsController', function($q,$popover, $scope, $rootScope, $http, Socket) {
 window.tab_sc = $scope;
+
 
     $scope.users = [];
     $scope.search = {
@@ -13,7 +14,11 @@ window.tab_sc = $scope;
 
     $scope.tags = [];
 
+    $scope.popover = {title:'',members:[]};
 
+    $scope.showRoomMember = function(roomName,users) {
+        $scope.popover = {title:  roomName , members: users};
+    }
 //we need to test here if the room for the right or the left !!!!!!!!!!!!
     Socket.on('roomList', function(data) {
        $scope.roomsLeft  = data.rooms;
@@ -72,18 +77,17 @@ window.tab_sc = $scope;
     }
 
     $scope.startConversation = function(fUsername) {
-        //alert('startConversation '+userId);
         var arr = [$rootScope.user.username,fUsername];
        
         $http.post('/api/room/create',{users: arr}).success(function(data){
                     $scope.tabsLeft.activeTab = 'Discussion';
+                    arr = arr.sort();
+                    var switchedRoom = "["+arr.toString()+"]";
+                    $scope.setCurrentRoom(switchedRoom);
 
-                    if(data.length>0) {
-                        $rootScope.activeRoom = "["+$rootScope.user.username+","+fUsername+"]";
-                        $scope.activeRoom = $rootScope.activeRoom;
-                    }
-
-           // alert("you can chat with "+fUsername+" now;! type a message!");
+                $http.get('/api/messages/'+switchedRoom).success(function(msgs){
+                        $rootScope.messages = msgs;
+                });
         });
     }
     $scope.setCurrentRoom = function(clickedRoom) {
