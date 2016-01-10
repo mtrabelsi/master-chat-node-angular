@@ -15,7 +15,7 @@ window.tab_sc = $scope;
     $scope.tags = [];
 
     $scope.popover = {title:'',members:[]};
-
+    
     $scope.showRoomMember = function(roomName,users) {
         $scope.popover = {title:  roomName , members: users};
     }

@@ -1,4 +1,4 @@
-var chatModule = angular.module('module.chat', ['angularMoment','ngSanitize','mgcrea.ngStrap','ngAnimate']);
+var chatModule = angular.module('module.chat', ['luegg.directives','angularMoment','ngSanitize','mgcrea.ngStrap','ngAnimate']);
 
 chatModule.controller('ChatController', function($scope, $rootScope, Socket, $aside) {
 window.chat_sc = $scope;
@@ -22,6 +22,7 @@ window.chat_sc = $scope;
        }
     });
 
+   
     //this function will detect if the message is private or not
     $scope.fireSendMessage = function() {
         if(typeof $scope.selectedUser !='object') {
@@ -38,6 +39,8 @@ window.chat_sc = $scope;
 
             }
         }
+
+      //  $scope.updateScroll();
     }
 
     $scope.sendPrivateMessage = function(to,msg) {
@@ -119,5 +122,28 @@ window.chat_sc = $scope;
         $scope.users = data.users;
     });
 
+
+});
+
+
+chatModule.directive('schrollBottom', function () {
+  return {
+    scope: {
+      schrollBottom: "="
+    },
+    link: function (scope, element) {
+      scope.$watchCollection('schrollBottom', function (newValue) {
+        if (newValue) {
+       //$(element).scrollTop($(element)[0].scrollHeight);
+
+       //this is an animated version :)
+
+       $(element).scrollTo($(element)[0].scrollHeight,300,{axis:'y'});
+       //$(element).scrollTo('100%',300,{axis:'y'});
+
+        }
+      });
+    }
+  };
 
 });
