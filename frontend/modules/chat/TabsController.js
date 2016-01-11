@@ -10,7 +10,7 @@ window.tab_sc = $scope;
       
     };
 
-    $scope.activeRoom = "" ;
+    $rootScope.activeRoom = "" ;
 
     $scope.tags = [];
 
@@ -91,8 +91,7 @@ window.tab_sc = $scope;
         });
     }
     $scope.setCurrentRoom = function(clickedRoom) {
-        $scope.activeRoom = clickedRoom;
-        $rootScope.activeRoom = $scope.activeRoom;
+        $rootScope.activeRoom = clickedRoom;
     }
 
     $scope.loadMessages = function(clickedRoom) {

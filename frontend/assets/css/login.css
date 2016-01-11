@@ -9,10 +9,15 @@
     background-color: #337ab7;
     border-color: #337ab7;
 }
-.room-member-icone {
+.group-member-icone {
   position: absolute;
   top: 20%;
   left: 80%;
+}
+.room-member-icone {
+  position: absolute;
+  top: 20%;
+  left: 72%;
 }
 .decline-icone {
   position: absolute;

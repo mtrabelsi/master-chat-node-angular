@@ -1,0 +1,32 @@
+<div class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" ng-click="$hide()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Chat Room</h4>
+      </div>
+
+  <div class="modal-body">
+   <input type="text" class="form-control input-sm" ng-model="room" placeholder="Room name" />
+                        <tags-input class="ti-input-sm" ng-model="tags" placeholder="Add some friends here" display-property="username">
+                              <auto-complete source="loadUsers()"></auto-complete>
+                        </tags-input> 
+                
+  </div>
+          <div class="modal-footer">
+
+              <button type="button" class="btn btn-danger" ng-click="$hide();">
+                    <i class="fa fa-times"></i> Cancel
+              </button>
+              <button type="button" class="btn btn-default" ng-click="createRoom(room, true);room='';$hide();">
+                            <i class="fa fa-child"></i> Invite to Chat
+              </button>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>

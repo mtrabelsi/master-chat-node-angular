@@ -1,21 +1,11 @@
      	    <br />
             <div class="list-group">
-                <div class="row">
-                    <div class="col-md-8">
-                        <input type="text" class="form-control input-sm" ng-model="room" placeholder="Group name" />
-                        <tags-input class="ti-input-sm" ng-model="tags" placeholder="Add some friends here" display-property="username">
-                              <auto-complete source="loadUsers()"></auto-complete>
-                        </tags-input> 
+                <button type="button" class="btn btn-danger" data-animation="am-fade-and-scale" data-template-url="modules/chat/views/tabs/groupModal.html" bs-modal="modal"> <i class="fa fa-plus-circle"></i> Add Chat group
+                  </button>
 
-                    </div>
-                    <div class="col-md-4">
-                        <button type="button" class="btn btn-success btn-xs" ng-click="createRoom(room, false);room='';">
-                            <i class="fa fa-commenting"></i> Chat now 
-                        </button>
-                    </div>
-                </div>
+               
 
-                <br/>
+                <br/><br/>
 
                 <!-- 
                 {
@@ -37,7 +27,7 @@
                             <a href="#" ng-if="room.custom==false" class="list-group-item" ng-class="{active: room.roomName==activeRoom}" ng-click="setCurrentRoom(room.roomName);loadMessages(room.roomName);">
                                 <i class="fa fa-signal"></i> {{room.roomName}}
 
-                                 <button ng-click="showRoomMember(room.roomName,room.users)"ng-if="room.custom==false" class="btn btn-default btn-xs room-member-icone" id="room.roomName" title="{{popover.title}}" data-content="{{popover.members}}" data-template-url="modules/chat/views/tabs/popover.member.html" html="true" data-animation="am-flip-x" data-auto-close="1" bs-popover>
+                                 <button ng-click="showRoomMember(room.roomName,room.users)"ng-if="room.custom==false" class="btn btn-default btn-xs group-member-icone" id="room.roomName" title="{{popover.title}}" data-content="{{popover.members}}" data-template-url="modules/chat/views/tabs/popover.member.html" html="true" data-animation="am-flip-x" data-auto-close="1" bs-popover>
                                      <span class="badge"> {{room.users.length}}</span>
                                      <i class="fa fa-users"></i>
                                  </button>
