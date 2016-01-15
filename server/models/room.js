@@ -5,6 +5,7 @@ module.exports = function(mongoose) {
     //createdBy: { type: Schema.Types.ObjectId, ref: 'User'},
     var roomSchema = new Schema({
         roomName: String,
+        owner: String,
         users: [String],
         custom: { type: Boolean, default: false },
         created: Date,

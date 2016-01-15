@@ -15,6 +15,13 @@ window.chat_sc = $scope;
     };
 
 
+    $scope.leaveDiscussion = function(leaveRoom) {
+       Socket.emit("leave", {roomName: leaveRoom, who:$rootScope.user.username});
+    }
+
+    $scope.kick = function(member,kickRoom) {
+      Socket.emit("kick", {roomName: kickRoom, kicked: member});
+    }
 
     $scope.$watch('selectedUser', function() {
        if(typeof $scope.selectedUser == 'object'){

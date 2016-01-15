@@ -21,8 +21,7 @@ window.tab_sc = $scope;
     }
 //we need to test here if the room for the right or the left !!!!!!!!!!!!
     Socket.on('roomList', function(data) {
-       $scope.roomsLeft  = data.rooms;
-       $scope.roomsRight  = data.rooms;
+       $rootScope.rooms  = data.rooms;
        // alert("rooms received "+JSON.stringify(data));
     });
 
@@ -33,7 +32,7 @@ window.tab_sc = $scope;
         users.push(tag.username)
        }) ;
 
-        Socket.emit("roomEvent", {roomName: entredRoom, join:true, users:users, invite: invite});
+        Socket.emit("roomEvent", {roomName: entredRoom,  owner:$rootScope.user.username, join:true, users:users, invite: invite});
        $scope.tags = [];
     }
 
@@ -79,7 +78,7 @@ window.tab_sc = $scope;
     $scope.startConversation = function(fUsername) {
         var arr = [$rootScope.user.username,fUsername];
        
-        $http.post('/api/room/create',{users: arr}).success(function(data){
+        $http.post('/api/room/create',{users: arr,owner: $rootScope.user.username}).success(function(data){
                     $scope.tabsLeft.activeTab = 'Discussion';
                     arr = arr.sort();
                     var switchedRoom = "["+arr.toString()+"]";
@@ -141,7 +140,7 @@ window.tab_sc = $scope;
 
        if($scope.tabsLeft.activeTab=="Discussion") {
             $http.get('/api/room/'+$rootScope.user.username).success(function(rms){
-                $scope.roomsLeft = rms;
+                $rootScope.rooms = rms;
             });
         }
     };
@@ -153,7 +152,7 @@ window.tab_sc = $scope;
 
        if($scope.tabsRight.activeTab=="Chat Rooms") {
             $http.get('/api/room/'+$rootScope.user.username).success(function(rms){
-                $scope.roomsRight = rms;
+                $rootScope.rooms = rms;
             });
         }
     };

@@ -100,6 +100,7 @@ module.exports = function(app, Room, User, async, io, roomHelper, roomsOwners, c
             
                var room = new Room({
                     roomName: roomName,
+                    owner: req.body.owner,
                     users: users
                 });
 
