@@ -4,11 +4,12 @@ var acceptedInviteUsers = [];
 
     io.on('connection', function(socket) {
 
-        /********* @pmsg *********
-        Description : This event handle sending users private messages - the server will look for that user using his nickname
-        Params      : msg object {message: STRING, nickname: STRING} - where the nickname is the user nickname
-        receiving the message
-        **********           **********/
+/********* @pmsg *********
+Description : This event handle sending users private messages - the server will look for that user using his nickname
+Params      : msg object {message: STRING, nickname: STRING} - where the nickname is the user nickname
+receiving the message
+**********           **********/
+
         socket.on('pmsg', function(msg) {
             if (!socket.room || typeof socket.room == "undefined") {
                 io.sockets.to(socket.id).emit('msgFront', {
@@ -38,25 +39,28 @@ var acceptedInviteUsers = [];
         });
 
 
-        /********* @getRoomList *********
-        Description : This event sends all rooms informations when a user connects,joins,leaves or disconnects.
-        Params      : NO PARAMS
-        **********           **********/
+/********* @getRoomList *********
+Description : This event sends all rooms informations when a user connects,joins,leaves or disconnects.
+Params      : NO PARAMS
+**********           **********/
+
         socket.on('getRoomList', roomList);
 
 
-        /********* @getUserList *********
-        Description : This event sends all users informations when a user fire it.
-        Params      : NO PARAMS
-        **********           **********/
+/********* @getUserList *********
+Description : This event sends all users informations when a user fire it.
+Params      : NO PARAMS
+**********           **********/
+
         socket.on('getUserList', userList);
 
 
-        /********* @invite *********
-        Description : This event handle sending/prodcasting users messages inside a specific room
-        Params      : msg object {message: STRING, nickname: STRING} - where the nickname is the
-        sender of the message
-        **********           **********/
+/********* @invite *********
+Description : This event handle sending/prodcasting users messages inside a specific room
+Params      : msg object {message: STRING, nickname: STRING} - where the nickname is the
+sender of the message
+**********           **********/
+
         socket.on('invite', function(users) {
             if (socket.room && typeof socket.room != "undefined") {
 
@@ -75,11 +79,12 @@ var acceptedInviteUsers = [];
             }
         });
 
-        /********* @msg *********
-        Description : This event handle sending/prodcasting users messages inside a specific room
-        Params      : msg object {message: STRING, nickname: STRING} - where the nickname is the
-        sender of the message
-        **********           **********/
+
+/********* @msg *********
+Description : This event handle sending/prodcasting users messages inside a specific room
+Params      : msg object {message: STRING, nickname: STRING} - where the nickname is the
+sender of the message
+**********           **********/
         socket.on('msg', function(msg) {
             if (typeof socket.myJoinedRoom != "undefined" && socket.myJoinedRoom.indexOf(msg.toRoom)!=-1) {
         //Socket.emit("msg", {nickname: $rootScope.user.username, message:msg, toRoom: $rootScope.activeRoom});
@@ -203,10 +208,10 @@ var acceptedInviteUsers = [];
 
         });
 
-        /********* @roomEvent *********
-        Description : This event handle room join and leave and all related info
-        Params      : room object {join: BOOLEAN, roomName: STRING}
-        **********           **********/
+/********* @roomEvent *********
+Description : This event handle room join and leave and all related info
+Params      : room object {join: BOOLEAN, roomName: STRING}
+**********           **********/
 socket.on('roomEvent', function(roomP) {
   
 if(roomP.invite==true) {
@@ -223,7 +228,17 @@ if(roomP.invite==true) {
                 });
 
 
-                if(rooms.length==0)
+                if(rooms.length!=0) {
+                    room = rooms[0];
+                    room.users.forEach(function(usr) {
+
+                        if(roomP.users.indexOf(usr)!=-1) {
+                            roomP.users.splice(roomP.users.indexOf(usr),1);
+                        }
+                    })
+
+                }
+
                 room.save(function(err, savedRoom) {
                     if (err) return console.error(err);
 
@@ -273,7 +288,14 @@ return;
                 });
 
 
-            if(rooms.length==0)
+            if(rooms.length!=0) {
+                room = rooms[0];
+                roomP.users.forEach(function(usr){
+                    if(room.users.indexOf(usr)==-1)
+                        room.users.push(usr);
+                });
+            }
+
                 room.save(function(err, savedRoom) {
                     if (err) return console.error(err);
 
@@ -309,21 +331,17 @@ return;
 
                 // res.send(savedRoom);
                 });
-              else
-                console.log("else");
+         
                 //res.send([]);
                 
-            });//end check
-
-
-    
+            });//end check 
 
     });
 
-        /********* @disconnect *********
-        Description : This event handle user disconnection and related infos
-        Params      : NO PARAMS
-        **********           **********/
+/********* @disconnect *********
+Description : This event handle user disconnection and related infos
+Params      : NO PARAMS
+**********           **********/
         socket.on('disconnect', function() {
             console.log(csl.error('User <' + socket.nickname + '> disconnected'));
             //clean out unused rooms - checks if there any unused room and clean them

@@ -32,7 +32,7 @@ window.tab_sc = $scope;
         users.push(tag.username)
        }) ;
 
-        Socket.emit("roomEvent", {roomName: entredRoom,  owner:$rootScope.user.username, join:true, users:users, invite: invite});
+       Socket.emit("roomEvent", {roomName: entredRoom,  owner:$rootScope.user.username, join:true, users:users, invite: invite});
        $scope.tags = [];
     }
 
