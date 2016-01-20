@@ -124,19 +124,44 @@ sender of the message
                             socket.join(savedRoom.roomName);
                             socket.myJoinedRoom.push(savedRoom.roomName);
 
-                            Room.find({users: socket.nickname}, function(err, rms) {
+                           
+
+            io.sockets.sockets.forEach(function(sock) {
+                 Room.find({users: sock.nickname}, function(err, rms) {
+                    if (err) return console.error(err);
+
+                      if(savedRoom.users.indexOf(sock.nickname)>-1) {
+                                                  
+                            //check for new room - if the room is new, set his owner to the current connected socket's nickname
+                            if (!roomsOwners[savedRoom.roomName] && typeof roomsOwners[savedRoom.roomName] === "undefined") {
+                                roomsOwners[savedRoom.roomName] = {
+                                    ownerName: sock.nickname,
+                                    isDefault: false
+                                };
+                            }
+
+                            Room.find({users: sock.nickname}, function(err, rms) {
                              if (err) return console.error(err);
 
-                             io.to(socket.id).emit('roomList', {
+                             io.to(sock.id).emit('roomList', {
                                                          rooms: rms
                                                         });
 
                             });
+                            
+                            //clean out unused rooms - checks if there any unused room and clean them
+                            roomHelper.roomsDigest();
+                           // roomList();
+                      }
+                    });
+
 
                 });
-            });
 
+            });
         });
+
+    });
 
     socket.on('leave', function(leave) {
            

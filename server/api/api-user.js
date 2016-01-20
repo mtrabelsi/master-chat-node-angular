@@ -63,13 +63,21 @@ module.exports = function(app, User) {
             password: req.body.password
         });
 
-        user.save(function(err, user) {
-            if (err) return console.error(err);
-
-            console.log(JSON.stringify(user));
-            res.send(user);
-
-        });
+        User.findOne({
+            username: req.body.username,
+        }, function(err, usr) {
+          if (err) return console.error(err);
+          
+          if(typeof usr=="undefined"|| usr=='' || usr ==null)
+          user.save(function(err, user) {
+              if (err) return console.error(err);
+              console.log(JSON.stringify(user));
+              res.send(user);
+           });
+          else
+            res.send('');
+      
+        });     
     });
 
 

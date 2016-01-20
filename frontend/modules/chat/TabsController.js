@@ -89,8 +89,13 @@ window.tab_sc = $scope;
                 });
         });
     }
-    $scope.setCurrentRoom = function(clickedRoom) {
+
+    $rootScope.default = false;
+    $rootScope.custom = false;
+    $scope.setCurrentRoom = function(clickedRoom,def,cust) {
         $rootScope.activeRoom = clickedRoom;
+        $rootScope.default = def;
+        $rootScope.custom = cust;
     }
 
     $scope.loadMessages = function(clickedRoom) {

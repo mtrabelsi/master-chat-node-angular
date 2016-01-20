@@ -87,6 +87,11 @@ window.chat_sc = $scope;
             $scope.time = new Date();
             $rootScope.messages.push(msg);
     });
+
+
+    $scope.isUndefined = function (thing) {
+      return (typeof thing === "undefined");
+    }
     
     $scope.sendMessage = function(msg) {
         console.log($rootScope.activeRoom);

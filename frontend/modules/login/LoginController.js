@@ -26,12 +26,18 @@ window.rsc = $rootScope;
     };
 
 
-  	$scope.signup = function() {
+  	$scope.signup = function(hide) {
 	  	$http.post('/api/user/create',{
 	  		username : $scope.signupData.username,
 	  		password: $scope.signupData.password
 	  	}).success(function(data){
-	  		$scope.nickname = data.username;
+
+	  		if(data!=''){
+	  			$scope.nickname = data.username;
+	  			hide();
+	  		}
+	  		else
+	  			alert("this username already exists, try with another one");
 	  	});
   	};
 

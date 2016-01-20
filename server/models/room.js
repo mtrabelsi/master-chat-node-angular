@@ -8,6 +8,7 @@ module.exports = function(mongoose) {
         owner: String,
         users: [String],
         custom: { type: Boolean, default: false },
+        default: { type: Boolean, default: false },
         created: Date,
         updated: Date
     });

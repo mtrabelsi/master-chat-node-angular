@@ -16,7 +16,7 @@
                 </div>
 
                 <div class="col-md-4">
-                <button ng-if="activeRoom" ng-click="leaveDiscussion(activeRoom)" class="btn btn-danger pull-right"><i class="fa fa-sign-out"></i></button>
+                <button ng-if="activeRoom&&(default==false||custom==true)" ng-click="leaveDiscussion(activeRoom)" class="btn btn-danger pull-right"><i class="fa fa-sign-out"></i></button>
                 </div>
                 <!--<div class="col-md-1">
                     <a class="btn btn-success" ng-click="invite()"> <i class="fa fa-user-plus"></i> Invite

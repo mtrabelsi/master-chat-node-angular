@@ -4,59 +4,7 @@
  * and open the template in the editor.
  */
 module.exports = function(app, Room, User, async, io, roomHelper, roomsOwners, csl) {
-    /* 
-    app.get('/api/user/friends/:userId', function(req, res) {    
-       if(req.query.q =="undefined")
-          req.query.q = '';
-       User.findOne({_id: req.params.userId})
-           .populate('friends')
-           .exec(function(err, user) {
-            if (err) return console.error(err);
-
-             var regex = new RegExp(req.query.q, "i");
-                User.find({username:regex})
-                    .exec(function(err,users) {
-                      var filtredUsers = [];   
-                       user.friends.forEach(function(friend) {
-                           users.forEach(function(similar) {
-                            if(similar.username==friend.username) {
-                                filtredUsers.push(similar);
-                              }
-                           });
-
-                       });
-
-                        res.send(filtredUsers);
-                    });
-            });
-       });
-
-
-
-    app.post('/api/user/get', function(req, res) {    
-        console.log(req.body.username,req.body.password);
-       User.findOne({
-            username: req.body.username,
-            password: req.body.password
-        }, function(err, user) {
-            if (err) return console.error(err);
-        
-            res.send(user);
-        });
-    });
-
-*/
-
-    /*
-      var roomSchema = new Schema({
-            roomName: String,
-            users: [Schema.Types.ObjectId],
-            created: Date,
-            updated: Date
-        });
-
-    */
-
+    
 //return the rooms where the username is subcribed in
   app.get('/api/room/:username', function(req, res) {
          Room.find({users: req.params.username}, function(err, rooms) {
@@ -69,17 +17,6 @@ module.exports = function(app, Room, User, async, io, roomHelper, roomsOwners, c
 
     //this is a master room creation
     app.post('/api/room/create', function(req, res) {
-/*
-        var populateUser = function(itemId, callback) {
-            User.findOne({
-                _id: itemId
-            }, function(err, user) {
-                if (err) return console.error(err);
-
-                callback(null, user);
-            });
-        };
-*/
 
         var roomName = "";
 
@@ -101,11 +38,19 @@ module.exports = function(app, Room, User, async, io, roomHelper, roomsOwners, c
                var room = new Room({
                     roomName: roomName,
                     owner: req.body.owner,
+                    default: true,
                     users: users
                 });
 
+               if(rooms.length>0) {
+                room = rooms[0];
+                req.body.users.forEach(function(usr){
+                  if(room.users.indexOf(usr)==-1)
+                    room.users.push(usr);
+                });
 
-                if(rooms.length==0)
+               }
+                
                 room.save(function(err, savedRoom) {
                     if (err) return console.error(err);
 
@@ -125,7 +70,15 @@ module.exports = function(app, Room, User, async, io, roomHelper, roomsOwners, c
                         socket.myJoinedRoom.push(savedRoom.roomName);
                         
                         console.log('User ', csl.fine(socket.nickname), 'have joined', csl.fine(savedRoom.roomName));
+                        
+                        Room.find({users: socket.nickname}, function(err, rms) {
+                             if (err) return console.error(err);
 
+                             io.to(socket.id).emit('roomList', {
+                                                         rooms: rms
+                                                        });
+
+                            });
                         //clean out unused rooms - checks if there any unused room and clean them
                         roomHelper.roomsDigest();
                         // roomList();
@@ -139,9 +92,42 @@ module.exports = function(app, Room, User, async, io, roomHelper, roomsOwners, c
                   res.send(savedRoom);
 
                 });
-              else
-                res.send([]);
-                
+           /*   else {
+
+                io.sockets.sockets.forEach(function(socket) {
+                  if(req.body.users.indexOf(socket.nickname)>-1) {
+                      
+                        //check for new room - if the room is new, set his owner to the current connected socket's nickname
+                        if (!roomsOwners[room.roomName] && typeof roomsOwners[room.roomName] === "undefined") {
+                            roomsOwners[room.roomName] = {
+                                ownerName: socket.nickname,
+                                isDefault: false
+                            };
+                        }
+
+                        socket.join(room.roomName);
+                        socket.myJoinedRoom.push(room.roomName);
+                        console.log('User ', csl.fine(socket.nickname), 'have joined', csl.fine(room.roomName));
+
+                         Room.find({users: socket.nickname}, function(err, rms) {
+                             if (err) return console.error(err);
+
+                             io.to(socket.id).emit('roomList', {
+                                                         rooms: rms
+                                                        });
+
+                            });
+                        
+
+                        //clean out unused rooms - checks if there any unused room and clean them
+                        roomHelper.roomsDigest();
+                        // roomList();
+
+                  }
+
+                });
+
+              }  */
             });//end check
        // });
 
