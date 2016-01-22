@@ -14,6 +14,16 @@
   top: 20%;
   left: 80%;
 }
+.add-group-member-icone {
+  position: absolute;
+  top: 20%;
+  left: 67%;
+}
+.add-room-member-icone {
+  position: absolute;
+  top: 20%;
+  left: 55%;
+}
 .room-member-icone {
   position: absolute;
   top: 20%;

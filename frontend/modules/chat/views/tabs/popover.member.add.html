@@ -1,0 +1,28 @@
+<div class="popover" style="width:80%;">
+  <div class="arrow"></div>
+  <h3 class="popover-title">Friends to add</h3>
+  <div class="popover-content">
+
+    <span ng-if="usersToAdd.length==0">No friends to add. </span>
+    <span ng-if="usersToAdd.length>0" ng-repeat="member in usersToAdd">
+
+    	<button ng-click="addToRoom(member,room.roomName, room.custom)" class="btn btn-success btn-xs">
+        <i class="fa fa-plus"></i>
+      </button> 
+      <!--
+    	<button ng-if="member==user.username" class="btn btn-default btn-xs">
+      <i class="fa fa-comment" ></i>
+      </button> 
+
+    	<button ng-click="kick(member,room.roomName)" ng-if="member!=user.username&&room.owner==user.username" class="btn btn-danger btn-xs"> <i class="fa fa-times-circle"></i>
+    	</button> 
+
+    	<button ng-if="member==user.username||room.owner!=user.username" class="btn btn-default btn-xs"> <i class="fa fa-times-circle"></i>
+  	  </button> 
+      -->
+
+    	<a href="#">{{member}}</a></br>  
+    </span>
+
+  </div>
+</div>

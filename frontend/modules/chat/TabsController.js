@@ -15,7 +15,23 @@ window.tab_sc = $scope;
     $scope.tags = [];
 
     $scope.popover = {title:'',members:[]};
+
+    $rootScope.usersToAdd = [];
     
+    $scope.showFriendsToAdd = function(roomName,roomUsers) {
+       $http.get('/api/user/friends/'+$rootScope.user._id+'?q='+$scope.search.fusername).success(function(friends){
+            $scope.friends = friends;
+            $rootScope.usersToAdd = [];
+
+            $scope.friends.forEach(function(usr){
+                if(roomUsers.indexOf(usr.username)==-1){
+                    $rootScope.usersToAdd.push(usr.username);
+                }
+            });
+        });  
+    }
+   
+
     $scope.showRoomMember = function(roomName,users) {
         $scope.popover = {title:  roomName , members: users};
     }
@@ -34,6 +50,11 @@ window.tab_sc = $scope;
 
        Socket.emit("roomEvent", {roomName: entredRoom,  owner:$rootScope.user.username, join:true, users:users, invite: invite});
        $scope.tags = [];
+    }
+
+  $scope.addToRoom = function(toAddUser,entredRoom, invite) {
+        var users = [toAddUser];
+       Socket.emit("roomEvent", {roomName: entredRoom,  owner:$rootScope.user.username, join:true, users:users, invite: invite});
     }
 
     $scope.loadUsers = function() {

@@ -44,6 +44,11 @@
                                      <i class="fa fa-users"></i>
                                  </button>
 
+
+                                  <button ng-click="showFriendsToAdd(room.roomName,room.users)"ng-if="room.custom==true" class="btn btn-default btn-xs add-room-member-icone" id="room.roomName" title="{{popover.title}}" data-content="{{popover.members}}" data-template-url="modules/chat/views/tabs/popover.member.add.html" html="true" data-animation="am-flip-x" data-auto-close="1" bs-popover>
+                                     <i class="fa fa-user-plus"></i>
+                                 </button>
+
                         </a> 
                     </div>
                     <!--

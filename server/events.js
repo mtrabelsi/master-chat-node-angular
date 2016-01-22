@@ -305,6 +305,7 @@ return;
         Room.find({roomName:roomP.roomName},function(err,rooms) {
           if (err) return console.error(err);
 
+          console.log(roomP,rooms);
             
                var room = new Room({
                     roomName: roomP.roomName,
