@@ -98,7 +98,7 @@ sender of the message
                 message.save(function(err, savedMessage) {
                     if (err) return console.error(err);
                     
-                    io.sockets.to(msg.toRoom).emit('msgFront', msg);
+                    io.sockets.to(msg.toRoom).emit('msgFront', savedMessage);
 
                 });
 

@@ -25,9 +25,9 @@
             </div>
             <div id="chatBox" schroll-bottom="messages" style="margin-top:10px; overflow-y: auto;height:400px;">
                 <div ng-repeat="message in messages">
-                    <div class="message">
+                    <div class="message" ng-if="message.toRoom==activeRoom">
                         <div ng-if="!message.private">
-                            <span ng-if="message.toRoom==activeRoom">
+                            <span>
                                 <i class="fa fa-user"></i> <b> {{message.nickname}} ></b> {{message.message}}
                             </span>
                         <!--     <span ng-if="message.toRoom!=activeRoom">
@@ -36,7 +36,7 @@
                             
                             <div class="pull-right" style="color: gray;">
                                   <i class="fa fa-clock-o"> </i>  Sent at
-                                  <time am-time-ago="time" title="{{ time | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">
+                                  <time am-time-ago="message.created" title="{{ message.created | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">
                                   </time>
                             </div>
                         </div> 
@@ -46,7 +46,7 @@
 
                             <div class="pull-right" style="color: gray;">
                                   <i class="fa fa-clock-o"> </i>  Sent at
-                                  <time am-time-ago="time" title="{{ time | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">
+                                  <time am-time-ago="message.created" title="{{ message.created | amDateFormat: 'dddd, MMMM Do YYYY, h:mm a' }}">
                                   </time>
                             </div>
                         </div>

@@ -78,7 +78,7 @@ window.chat_sc = $scope;
     $rootScope.messages = [];
 
     Socket.on('msgFront', function (msg) {
-        $scope.time = new Date();
+       // $scope.time = new Date();
         $rootScope.messages.push(msg);
     });
 
