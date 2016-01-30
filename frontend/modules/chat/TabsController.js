@@ -135,7 +135,12 @@ window.tab_sc = $scope;
           var deferred = $q.defer();
 
         if(decision==false) {
-            alert("It's not a bug, but it's not implimented yet!");
+            $http.put('/api/user/delete/'+$rootScope.user._id,{reqesterId: userId}).success(function(user){
+               $http.get('/api/user/invitations/'+$rootScope.user._id).success(function(invitations){
+                    console.log(invitations);
+                    $scope.invitations = invitations;
+                });
+            });
         } else {
             $http.put('/api/user/accept/'+$rootScope.user._id,{reqesterId: userId}).success(function(user){
                $http.get('/api/user/invitations/'+$rootScope.user._id).success(function(invitations){

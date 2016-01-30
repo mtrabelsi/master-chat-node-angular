@@ -137,6 +137,25 @@ module.exports = function(app, User) {
         });
     });
 
+app.put('/api/user/delete/:requestedId', function(req, res) {
+        User.findOne({
+            _id: req.params.requestedId
+        }, function(err, user) {
+            if (err) return console.error(err);
+    
+                var indexToCut = user.invitations.indexOf(req.body.reqesterId);
+                if (indexToCut > -1) {
+                  user.invitations.splice(indexToCut, 1);
+                }
+
+                user.save(function(err, user) {
+                                if (err) return console.error(err);
+                                // console.log(JSON.stringify(user));
+                                res.send(user);
+                            });
+        });
+    });
+
     app.put('/api/user/unfriend/:requestedId', function(req, res) {
         User.findOne({
             _id: req.params.requestedId
