@@ -26,6 +26,13 @@ The index.js is the file responsible for running the server, it loads all module
 To start the server just run this command: **node index.js**
 Then in your browser go to:  http://localhost:8080/
 
+# TODOS
+
+- Add API Docs
+- Webrtc Video/Voice Call
+- Extensible Widget system
+- Emoticones
+
 # Foundation
 
 The Architecture is very simple, basically we've two important folders :
