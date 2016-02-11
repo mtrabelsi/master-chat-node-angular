@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 module.exports = function(app, User) {
-   
+
+
     app.get('/api/user/friends/:userId', function(req, res) {    
        if(req.query.q =="undefined")
           req.query.q = '';
@@ -212,10 +213,6 @@ app.put('/api/user/delete/:requestedId', function(req, res) {
 
                     res.send(users);
                 });
-
-
-
-       // res.send(users);
     });
 
 }
