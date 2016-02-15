@@ -14,6 +14,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
+var async = require('async');
+
 var chalk = require('chalk');
 
 var error = chalk.bold.red;
@@ -35,13 +37,6 @@ var prefixBower = __dirname + '/bower_modules';
 
 var mongoose = require('mongoose');
     mongoose.connect('mongodb://localhost:27017/chatserver');
-
-
-
-//handle rooms owners list
-var roomsOwners = new Object();
-var userHelper = require('./server/userHelper.js')(io);
-var roomHelper = require('./server/roomHelper.js')(io, roomsOwners, userHelper, csl);
 
 app.use(cookieParser()); // read cookies (needed for auth)
 // get all data/stuff of the body (POST) parameters
@@ -79,26 +74,13 @@ var User = require('./server/models/user')(mongoose);
 var Room = require('./server/models/room')(mongoose);
 var Message = require('./server/models/message')(mongoose);
 
+var roomController = require('./server/controller/room-controller')(Room,io,csl);
+
 //middelware that will be executed for each new connected user
 io.use(function(socket, next) {
     socket.nickname = socket.request._query['nickname'];
     socket.myJoinedRoom = [];
     console.log('User with nickname ', info(socket.nickname), ' has set his nickname');
-    next();
-});
-
-//middelware that will be executed for each new connected user
-io.use(function(socket, next) {
-    
-        roomsOwners[socket.id] = {
-            ownerName: socket.nickname,
-            isDefault: true
-        };
-
-        console.log(csl.info('[BEGIN] Rooms Owners :'));
-        console.log(roomsOwners);
-        console.log(csl.info('[END] Rooms Owners'));
-
     next();
 });
 
@@ -110,21 +92,10 @@ io.use(function(socket, next) {
 
               rooms.forEach(function(room){
 
-                //check for new room - if the room is new, set his owner to the current connected socket's nickname
-                if (!roomsOwners[room.roomName] && typeof roomsOwners[room.roomName] === "undefined") {
-                    roomsOwners[room.roomName] = {
-                        ownerName: socket.nickname,
-                        isDefault: false
-                    };
-                }
-
                 socket.join(room.roomName);
                 socket.myJoinedRoom.push(room.roomName);
                 
                 console.log('User ', csl.fine(socket.nickname), 'have joined', csl.fine(room.roomName));
-
-                //clean out unused rooms - checks if there any unused room and clean them
-                roomHelper.roomsDigest();
 
               });
                  
@@ -134,9 +105,9 @@ io.use(function(socket, next) {
 });
 
 
-var api = require('./server/api')(Message, User, Room, app, mongoose,io, roomHelper, roomsOwners, csl);
+var api = require('./server/api')(async ,roomController ,Message, User, Room, app, mongoose,io, csl);
 //events
-var events = require('./server/events')(io, roomsOwners, userHelper, roomHelper, csl, Message, Room);
+var events = require('./server/events')(io, csl, Message, Room);
 
 
 var port = process.env.PORT || 8080; // set our port

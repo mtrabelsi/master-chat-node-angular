@@ -1,59 +1,8 @@
-module.exports = function(io, roomsOwners, userHelper, roomHelper, csl, Message, Room) {
+module.exports = function(io, csl, Message, Room) {
 var invitedUsers = [];
 var acceptedInviteUsers = [];
 
     io.on('connection', function(socket) {
-
-/********* @pmsg *********
-Description : This event handle sending users private messages - the server will look for that user using his nickname
-Params      : msg object {message: STRING, nickname: STRING} - where the nickname is the user nickname
-receiving the message
-**********           **********/
-
-        socket.on('pmsg', function(msg) {
-            if (!socket.room || typeof socket.room == "undefined") {
-                io.sockets.to(socket.id).emit('msgFront', {
-                    nickname: 'ROBOT',
-                    message: 'You cant send private message, please join at least a room first!'
-                });
-                return;
-            }
-            if (userHelper.isAlreadyJoined(msg.to, socket.room)) {
-                var toUser = userHelper.getUserByNickname(msg.to);
-                console.log('toUser', toUser);
-                console.log('msg', msg);
-
-                [toUser.id, socket.id].forEach(function(id) {
-                    io.sockets.to(id).emit('pmsgFront', {
-                        private: true,
-                        nickname: socket.nickname,
-                        message: msg.message
-                    });
-                });
-            } else {
-                io.sockets.to(socket.id).emit('msgFront', {
-                    nickname: 'ROBOT',
-                    message: 'You cant send private message to users of other room!'
-                });
-            }
-        });
-
-
-/********* @getRoomList *********
-Description : This event sends all rooms informations when a user connects,joins,leaves or disconnects.
-Params      : NO PARAMS
-**********           **********/
-
-        socket.on('getRoomList', roomList);
-
-
-/********* @getUserList *********
-Description : This event sends all users informations when a user fire it.
-Params      : NO PARAMS
-**********           **********/
-
-        socket.on('getUserList', userList);
-
 
 /********* @invite *********
 Description : This event handle sending/prodcasting users messages inside a specific room
@@ -131,14 +80,6 @@ sender of the message
                     if (err) return console.error(err);
 
                       if(savedRoom.users.indexOf(sock.nickname)>-1) {
-                                                  
-                            //check for new room - if the room is new, set his owner to the current connected socket's nickname
-                            if (!roomsOwners[savedRoom.roomName] && typeof roomsOwners[savedRoom.roomName] === "undefined") {
-                                roomsOwners[savedRoom.roomName] = {
-                                    ownerName: sock.nickname,
-                                    isDefault: false
-                                };
-                            }
 
                             Room.find({users: sock.nickname}, function(err, rms) {
                              if (err) return console.error(err);
@@ -148,10 +89,7 @@ sender of the message
                                                         });
 
                             });
-                            
-                            //clean out unused rooms - checks if there any unused room and clean them
-                            roomHelper.roomsDigest();
-                           // roomList();
+               
                       }
                     });
 
@@ -327,15 +265,7 @@ return;
 
                     io.sockets.sockets.forEach(function(sock) {
                       if(savedRoom.users.indexOf(sock.nickname)>-1) {
-                                                  
-                            //check for new room - if the room is new, set his owner to the current connected socket's nickname
-                            if (!roomsOwners[savedRoom.roomName] && typeof roomsOwners[savedRoom.roomName] === "undefined") {
-                                roomsOwners[savedRoom.roomName] = {
-                                    ownerName: sock.nickname,
-                                    isDefault: false
-                                };
-                            }
-
+              
                             sock.join(savedRoom.roomName);
                             sock.myJoinedRoom.push(savedRoom.roomName);
 
@@ -349,9 +279,6 @@ return;
                             });
                             
                             console.log('User ', csl.fine(sock.nickname), 'have joined', csl.fine(savedRoom.roomName));
-                            //clean out unused rooms - checks if there any unused room and clean them
-                            roomHelper.roomsDigest();
-                           // roomList();
                       }
                     });
 
@@ -370,27 +297,7 @@ Params      : NO PARAMS
 **********           **********/
         socket.on('disconnect', function() {
             console.log(csl.error('User <' + socket.nickname + '> disconnected'));
-            //clean out unused rooms - checks if there any unused room and clean them
-            roomHelper.roomsDigest();
-           // roomList();
         });
-
-
-        function roomList(targetRoom) {
-            var rooms = roomHelper.getRoomsList();
-            io.to(targetRoom).emit('roomList', {
-                rooms: rooms
-            });
-        }
-
-        function userList() {
-            var users = userHelper.getUsersList();
-
-            io.emit('userList', {
-                users: users
-            });
-        }
-
 
     });
 
