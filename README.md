@@ -2,6 +2,24 @@
 
 A full feature Chat server that uses node.js for backend and angular.js for the UI
 
+
+# Screenshots
+
+See who's in that room:
+
+![Screen1](chat7.png?raw=true "Screen1")  
+
+Send invitation to other members:
+
+![Screen1](chat4.png?raw=true "Screen1")
+
+Other screens:
+
+![Screen1](chat2.png?raw=true "Screen1")
+![Screen1](chat3.png?raw=true "Screen1")
+![Screen1](chat5.png?raw=true "Screen1")
+![Screen1](chat6.png?raw=true "Screen1")
+
 # Frameworks
 
 - express.js
